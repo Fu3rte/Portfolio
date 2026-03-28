@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import './style.css';
 import { cn } from '@/lib/utils';
+import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
 
 export function Navbar() {
+  const [isActiveSection, setIsActiveSection] = useState('home');
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -15,27 +17,22 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleDownloadResume = () => {
-    const resumeUrl = '/resume.pdf'; // 替换为你的简历文件路径
-
-    const link = document.createElement('a');
-    link.href = resumeUrl;
-    link.download = 'resume.pdf'; // 设置下载文件名
-  };
-
   const handleJumpToSection = (targetSection: string) => {
     window.location.hash = targetSection;
+    setIsActiveSection(targetSection);
   };
 
   return (
     <div
       className={cn(
-        'fixed top-0 left-0 z-50 flex w-full items-center justify-between border-b border-muted-foreground/20 px-6 py-4 transition-colors duration-300',
-        isScrolled ? 'bg-black/30 backdrop-blur-sm' : 'bg-black'
+        'fixed top-0 left-0 z-50 flex w-full items-center justify-between border-b border-muted-foreground/20 px-6 py-4 text-primary transition-colors duration-300',
+        isScrolled
+          ? 'bg-white/30 backdrop-blur-sm dark:bg-black/30'
+          : 'backdrop-blur-sm'
       )}
     >
       <a
-        className="logo text-2xl transition-opacity duration-300 hover:opacity-90"
+        className="logo text-2xl transition-opacity duration-300 hover:opacity-70"
         onClick={() => handleJumpToSection('home')}
       >
         Fu3rte
@@ -43,29 +40,37 @@ export function Navbar() {
 
       <div className="nav-links flex-center gap-4 md:gap-10">
         <a
-          className="links-item active"
+          className={cn(
+            'links-item',
+            isActiveSection === 'home' ? 'active' : ''
+          )}
           onClick={() => handleJumpToSection('home')}
         >
           首页
         </a>
 
-        <a className="links-item" onClick={() => handleJumpToSection('photos')}>
+        <a
+          className={cn(
+            'links-item',
+            isActiveSection === 'photos' ? 'active' : ''
+          )}
+          onClick={() => handleJumpToSection('photos')}
+        >
           照片集
         </a>
 
-        <a className="links-item" onClick={() => handleJumpToSection('blog')}>
+        <a
+          className={cn(
+            'links-item',
+            isActiveSection === 'blog' ? 'active' : ''
+          )}
+          onClick={() => handleJumpToSection('blog')}
+        >
           随记
         </a>
       </div>
 
-      <div>
-        <button
-          className="transition-opacity duration-300 hover:opacity-90"
-          onClick={handleDownloadResume}
-        >
-          下载简历
-        </button>
-      </div>
+      <AnimatedThemeToggler />
     </div>
   );
 }

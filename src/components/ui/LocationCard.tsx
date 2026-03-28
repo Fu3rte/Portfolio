@@ -1,6 +1,7 @@
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import avatarSrc from '@/assets/sarff.jpg';
 
 const LOCATION = {
   lat: 22.9121,
@@ -10,28 +11,35 @@ const LOCATION = {
 
 export const LocationCard = () => {
   const avatarIcon = L.divIcon({
-    className: 'custom-marker',
+    className: 'custom-marker bg-transparent',
     html: `
       <div class="relative flex-center">
         <div class="absolute h-12 w-12 animate-[ping_2s_linear_infinite] rounded-full bg-[#007bff]/60"></div>
         
         <div class="absolute h-8 w-8 rounded-full bg-[#007bff]/20 blur-sm"></div>
 
-        <div class="relative h-10 w-10 rounded-full border-2 border-white/60 shadow-xl overflow-hidden bg-white">
-          <img src="/src/assets/sarff.jpg" class="h-full w-full" alt="avatar" />
+        <div class="relative h-12 w-12 overflow-hidden rounded-full border-2 border-white/80 shadow-2xl bg-white flex-center">
+          <img 
+            src=${avatarSrc} 
+            style="width: 100%; height: 100%; object-fit: cover; " 
+            alt="avatar" 
+          />
         </div>
       </div>
     `,
-    iconSize: [40, 40],
-    iconAnchor: [20, 20],
+    iconSize: [48, 48],
+    iconAnchor: [24, 24],
   });
 
   return (
-    <div className="mx-auto w-full max-w-md overflow-hidden rounded-[32px] border border-zinc-800 p-6">
+    <div className="w-full overflow-hidden rounded-[32px] border border-zinc-800 p-6">
       <div className="mb-6">
-        <p className="mt-1 font-medium text-white/60">
+        <p className="mt-1 text-primary/80 dark:text-white/60">
           Currently living in{' '}
-          <span className="font-bold text-white">{LOCATION.name}</span>.
+          <span className="font-bold text-primary dark:text-white">
+            {LOCATION.name}
+          </span>
+          .
         </p>
       </div>
 

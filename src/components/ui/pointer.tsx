@@ -125,7 +125,7 @@ export function Pointer({ children }: { children: React.ReactNode }) {
       {/* 光标主体 */}
       <div
         ref={wrapperRef}
-        className="pointer-events-none fixed top-0 left-0 z-[99999] opacity-0"
+        className="pointer-events-none fixed top-0 left-0 z-999999 opacity-0"
         style={{ willChange: 'transform' }}
       >
         <svg
@@ -146,7 +146,7 @@ export function Pointer({ children }: { children: React.ReactNode }) {
       {/* 文字标签 */}
       <div
         ref={labelRef}
-        className="pointer-events-none fixed top-0 left-0 z-[99999] rounded-full bg-[#007bff] px-3 py-1.5 text-[10px] font-bold tracking-widest text-white uppercase opacity-0 shadow-lg"
+        className="pointer-events-none fixed top-0 left-0 z-99999 rounded-full bg-[#007bff] px-3 py-1.5 text-[10px] font-bold tracking-widest text-white uppercase opacity-0 shadow-lg"
         style={{ transformOrigin: '0 0' }}
       />
     </>
