@@ -1,0 +1,30 @@
+.links-item {
+  position: relative;
+  display: inline-block;
+  color: oklch(0.756 0 0);
+}
+
+.links-item.active {
+  color: #fff;
+}
+
+.links-item::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
+}
+
+.links-item:hover::after {
+  transform: scaleX(1.2);
+}
+
+.links-item.active::after {
+  transform: scaleX(1.2);
+}

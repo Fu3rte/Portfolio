@@ -1,21 +1,41 @@
-import { Button } from "@/components/ui/button"
+import { Navbar } from './components/Navbar/Navbar';
+import { ScrollProgress } from './components/WholePage/ScrollProgress';
+
+import { Hero } from './features/Hero/Hero';
+import { About } from './features/About/About';
+
+import { DotPattern } from './components/ui/dot-pattern';
+import { cn } from '@/lib/utils';
+
+import { Pointer } from './components/ui/pointer';
 
 export function App() {
   return (
-    <div className="flex min-h-svh p-6">
-      <div className="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-        <div>
-          <h1 className="font-medium">Project ready!</h1>
-          <p>You may now add components and start building.</p>
-          <p>We&apos;ve already added the button component for you.</p>
-          <Button className="mt-2">Button</Button>
-        </div>
-        <div className="font-mono text-xs text-muted-foreground">
-          (Press <kbd>d</kbd> to toggle dark mode)
-        </div>
+    <Pointer>
+      <Navbar />
+      <ScrollProgress />
+
+      <div className="relative min-h-screen bg-black">
+        <DotPattern
+          className={cn(
+            'fixed inset-0 z-0 opacity-[0.3]',
+            // 中心亮，四周淡出
+            'mask-[radial-gradient(ellipse_at_center,white,transparent_80%)]'
+          )}
+          width={20}
+          height={20}
+          cx={1}
+          cy={1}
+          cr={1}
+        />
+
+        <main className="relative z-10 flex flex-col items-center px-4 lg:px-8">
+          <Hero />
+          <About />
+        </main>
       </div>
-    </div>
-  )
+    </Pointer>
+  );
 }
 
-export default App
+export default App;
