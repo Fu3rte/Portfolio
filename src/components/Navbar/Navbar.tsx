@@ -22,6 +22,13 @@ export function Navbar() {
     setIsActiveSection(targetSection);
   };
 
+  const handleJumpToTop = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -33,7 +40,7 @@ export function Navbar() {
     >
       <a
         className="logo text-2xl transition-opacity duration-300 hover:opacity-70"
-        onClick={() => handleJumpToSection('home')}
+        onClick={() => handleJumpToTop('home')}
       >
         Fu3rte
       </a>

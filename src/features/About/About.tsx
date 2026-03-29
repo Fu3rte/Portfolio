@@ -6,15 +6,15 @@ import { useGSAP } from '@gsap/react';
 import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Badge } from '@/components/ui/badge';
-import { LocationCard } from '@/components/ui/LocationCard';
+import { LocationCard } from '@/components/customComponent/LocationCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
 const HEADING = 'ABOUT ME';
 
 const INTERESTS = [
-  { emoji: '🎮', label: 'GAME' },
-  { emoji: '🏋️', label: 'CALISTHENICS' },
+  { emoji: '🍔', label: 'EATING' },
+  { emoji: '💪', label: 'CALISTHENICS' },
   { emoji: '🎧', label: 'MUSIC' },
 ];
 
@@ -77,7 +77,7 @@ export function About() {
 
   return (
     <div
-      className="relative z-10 mx-auto px-6 py-24 md:px-14 lg:py-40"
+      className="relative z-10 px-6 py-24 md:px-14 lg:py-40"
       id="about"
       ref={containerRef}
     >
@@ -115,17 +115,23 @@ export function About() {
           <BlurFade inView direction="up">
             <div className="space-y-4 tracking-wide">
               <p className="text-lg leading-[1.85] text-primary/70 md:text-xl">
-                我的昵称是
-                <span className="font-semibold text-primary">Fu3rte</span>
-                ，源于西语的 fuerte，意为
-                <span className="font-semibold text-primary">强壮</span>
-                （本人瘦得一 hhh）。
+                嗨，我是{' '}
+                <span className="font-semibold text-primary">Fu3rte</span>。
+                名字取自西语{' '}
+                <span className="font-semibold text-primary">fuerte</span>
+                ，意为
+                <span className="font-semibold text-primary">强壮 </span>
+                ,尽管这与我现在的体格有些“反差”，但我追求技术与成长的心却如其名般坚定。
               </p>
 
               <p className="text-lg leading-[1.85] text-muted-foreground md:text-xl">
-                我主要学习
-                <span className="font-semibold text-primary">前端开发</span>
-                ，平时除了敲代码也会打打游戏，玩玩街健，听听歌。
+                我专注于{' '}
+                <span className="font-semibold text-primary">前端开发</span>。
+                屏幕外，我偶尔玩玩{' '}
+                <span className="font-semibold text-primary">街健</span>
+                ，也享受沉浸在{' '}
+                <span className="font-semibold text-primary">音乐</span>{' '}
+                的世界里。 代码与生活，都是我探索的方式。
               </p>
             </div>
           </BlurFade>

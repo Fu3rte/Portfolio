@@ -7,12 +7,13 @@ import { About } from './features/About/About';
 import { DotPattern } from './components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
 
-import { Pointer } from './components/ui/pointer';
+import { Pointer } from './components/customComponent/pointer';
 import { ThemeProvider } from './components/theme-provider';
+import { TechStack } from './features/TechStack/TechStack';
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Pointer>
         <Navbar />
         <ScrollProgress />
@@ -31,9 +32,10 @@ function App() {
             cr={1}
           />
 
-          <main className="relative z-10 flex flex-col px-4 lg:px-8">
+          <main className="relative z-10 flex md:max-w-[80vw] flex-col px-4 lg:px-8">
             <Hero />
             <About />
+            <TechStack />
           </main>
         </div>
       </Pointer>
