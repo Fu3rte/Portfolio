@@ -77,7 +77,7 @@ export function About() {
 
   return (
     <div
-      className="relative z-10 px-6 py-24 md:px-14 lg:py-40"
+      className="relative z-10 px-6 py-10 md:px-14 lg:py-12"
       id="about"
       ref={containerRef}
     >
@@ -114,24 +114,16 @@ export function About() {
 
           <BlurFade inView direction="up">
             <div className="space-y-4 tracking-wide">
-              <p className="text-lg leading-[1.85] text-primary/70 md:text-xl">
-                嗨，我是{' '}
-                <span className="font-semibold text-primary">Fu3rte</span>。
-                名字取自西语{' '}
-                <span className="font-semibold text-primary">fuerte</span>
-                ，意为
-                <span className="font-semibold text-primary">强壮 </span>
-                ,尽管这与我现在的体格有些“反差”，但我追求技术与成长的心却如其名般坚定。
-              </p>
-
               <p className="text-lg leading-[1.85] text-muted-foreground md:text-xl">
-                我专注于{' '}
-                <span className="font-semibold text-primary">前端开发</span>。
-                屏幕外，我偶尔玩玩{' '}
-                <span className="font-semibold text-primary">街健</span>
-                ，也享受沉浸在{' '}
-                <span className="font-semibold text-primary">音乐</span>{' '}
-                的世界里。 代码与生活，都是我探索的方式。
+                I focus on{' '}
+                <span className="font-semibold text-primary">
+                  Frontend Development
+                </span>
+                . Out of screen, I play{' '}
+                <span className="font-semibold text-primary">calisthenics</span>
+                , dive in the world of{' '}
+                <span className="font-semibold text-primary">music</span>. At
+                the same time, I'd love to take a pic of every moments.
               </p>
             </div>
           </BlurFade>

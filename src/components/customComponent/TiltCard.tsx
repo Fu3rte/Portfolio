@@ -41,7 +41,7 @@ export const TiltCard = ({
     const xPercent = mouseX / rect.width - 0.5;
     const yPercent = mouseY / rect.height - 0.5;
 
-    const intensity = 15; // 旋转强度，数值越大旋转越明显
+    const intensity = 15;
 
     const rotateX = -yPercent * intensity;
     const rotateY = xPercent * intensity;

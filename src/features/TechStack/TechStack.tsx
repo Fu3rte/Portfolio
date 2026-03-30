@@ -61,7 +61,7 @@ export function TechStack() {
 
   return (
     <div
-      className="stack-container flex min-h-dvh w-full flex-col items-center space-y-6 px-6 py-16 md:px-10"
+      className="stack-container flex w-full flex-col items-center space-y-6 px-6 py-10 md:px-10 lg:py-12"
       id="tech-stack"
     >
       <h2 className="stack-label flex gap-2 self-start text-primary/80">

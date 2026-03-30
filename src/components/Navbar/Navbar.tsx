@@ -53,7 +53,7 @@ export function Navbar() {
           )}
           onClick={() => handleJumpToSection('home')}
         >
-          首页
+          Home
         </a>
 
         <a
@@ -63,17 +63,17 @@ export function Navbar() {
           )}
           onClick={() => handleJumpToSection('photos')}
         >
-          照片集
+          Photos
         </a>
 
         <a
           className={cn(
             'links-item',
-            isActiveSection === 'blog' ? 'active' : ''
+            isActiveSection === 'blogs' ? 'active' : ''
           )}
           onClick={() => handleJumpToSection('blog')}
         >
-          随记
+          Blogs
         </a>
       </div>
 

@@ -1,17 +1,36 @@
 import { Navbar } from './components/Navbar/Navbar';
 import { ScrollProgress } from './components/WholePage/ScrollProgress';
-
-import { Hero } from './features/Hero/Hero';
-import { About } from './features/About/About';
+import { Pointer } from './components/customComponent/pointer';
 
 import { DotPattern } from './components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
 
-import { Pointer } from './components/customComponent/pointer';
 import { ThemeProvider } from './components/theme-provider';
+
+import { Hero } from './features/Hero/Hero';
+import { About } from './features/About/About';
 import { TechStack } from './features/TechStack/TechStack';
+import { Project } from './features/Project/Project';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+
+    const handleTableChange = (e: any) => {
+      setIsMobile(e.matches);
+    };
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleTableChange);
+
+    return () => {
+      mediaQuery.removeEventListener('change', handleTableChange);
+    };
+  }, []);
+
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <Pointer>
@@ -32,10 +51,17 @@ function App() {
             cr={1}
           />
 
-          <main className="relative z-10 flex md:max-w-[80vw] flex-col px-4 lg:px-8">
+          {isMobile && (
+            <p className="absolute top-30 z-99 text-2xl font-semibold text-primary">
+              View on PC for better experience
+            </p>
+          )}
+
+          <main className="relative z-10 flex flex-col px-4 md:max-w-[80vw] lg:px-8">
             <Hero />
             <About />
             <TechStack />
+            <Project />
           </main>
         </div>
       </Pointer>

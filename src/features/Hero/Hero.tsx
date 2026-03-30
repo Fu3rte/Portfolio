@@ -89,7 +89,7 @@ export function Hero() {
 
               <div className="h-px w-full bg-linear-to-r from-transparent via-primary/10 to-transparent" />
 
-              <div className="flex-center flex-col text-2xl">
+              <div className="flex-center flex-col text-2xl transform-3d">
                 <h2 className="tracking-wider text-primary">Live In The</h2>
                 <Highlighter color="#007bff" padding={6} action="circle">
                   Moment!!
@@ -125,30 +125,6 @@ export function Hero() {
                 </div>
               </div>
             </CardContent>
-
-            <CardFooter className="flex gap-2 px-6 pt-6 pb-7">
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 gap-1.5 rounded-full border-primary/10 bg-primary/4 text-xs text-primary/50 transition-colors duration-300 hover:border-primary/20 hover:text-primary/80"
-              >
-                <a href="#about" className="flex-center gap-1">
-                  <ArrowDownRight className="size-3" />
-                  About
-                </a>
-              </Button>
-
-              <Button
-                variant="outline"
-                size="sm"
-                className="flex-1 gap-1.5 rounded-full bg-[#007bff] text-xs text-white transition-colors duration-300 hover:bg-background hover:text-[#007bff]"
-              >
-                <a href="" className="flex-center gap-1">
-                  <Mail className="size-3" />
-                  Contact
-                </a>
-              </Button>
-            </CardFooter>
           </Card>
         </TiltCard>
 
