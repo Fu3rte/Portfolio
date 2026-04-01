@@ -16,7 +16,7 @@ import {
   ProjectCardCTA,
 } from '@/components/customComponent/ProjectCard';
 
-import imgUrl from '@/assets/sarff.jpg';
+/* import imgUrl from '@/assets/sarff.jpg'; */
 
 gsap.registerPlugin(ScrollTrigger);
 

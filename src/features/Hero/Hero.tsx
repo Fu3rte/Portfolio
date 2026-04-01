@@ -1,17 +1,10 @@
 import { TiltCard } from '@/components/customComponent/TiltCard';
 import { Badge } from '@/components/ui/badge';
 import { BlurFade } from '@/components/ui/blur-fade';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Highlighter } from '@/components/ui/highlighter';
 import { OrbitingCircles } from '@/components/ui/orbiting-circles';
 import { TypingAnimation } from '@/components/ui/typing-animation';
-import { ArrowDownRight, Mail } from 'lucide-react';
 
 import avatarUrl from '@/assets/sarff.jpg';
 import raectUrl from '@/assets/react.svg';

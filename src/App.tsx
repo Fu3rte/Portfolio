@@ -12,8 +12,8 @@ import { About } from './features/About/About';
 import { TechStack } from './features/TechStack/TechStack';
 import { Project } from './features/Project/Project';
 import { useEffect, useState } from 'react';
-import { Contact } from './features/Contact/Contact';
-import { Footer } from './features/Footer/Footer';
+/* import { Contact } from './features/Contact/Contact';
+ */ import { Footer } from './features/Footer/Footer';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
