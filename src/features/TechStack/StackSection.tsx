@@ -52,7 +52,7 @@ function GlassCard({
   icon: React.ReactNode | null;
 }) {
   return (
-    <div className="glass-card glass-surface group relative flex-center gap-2 rounded-4xl border border-primary/12 p-2 px-4 shadow-[0_25px_25px_rgba(0,0,0,0.1)] backdrop-blur-2xl md:w-40 lg:w-44 dark:shadow-[0_25px_25px_rgba(0,0,0,0.25)]">
+    <div className="glass-card glass-surface group relative flex-center gap-2 rounded-4xl border border-primary/12 p-2 px-4 shadow-[inset_16px_16px_16px_#cbced1,inset_-16px_-16px_16px_#ffffff] backdrop-blur-2xl md:w-40 lg:w-44 dark:shadow-[0_25px_25px_rgba(0,0,0,0.25)]">
       <div className="flex-center size-6 shrink-0 lg:size-8">
         <img
           src={`${icon}`}

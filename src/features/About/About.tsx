@@ -103,11 +103,12 @@ export function About() {
           <BlurFade direction="up" inView>
             <div className="about-name">
               <h3 className="bg-linear-to-r from-blue-600 via-cyan-500 to-sky-400 bg-clip-text text-5xl font-extrabold text-transparent md:text-6xl">
-                Fu3rte
+                Finnian
               </h3>
 
               <p className="mt-2 font-mono text-xs text-muted-foreground italic">
-                /ˈfwer.te/ — Spanish for &ldquo;strong&rdquo;
+                /ˈfɪn.i.ən/ — derived from Old Irish; symbolizing light, spirit,
+                and clarity.
               </p>
             </div>
           </BlurFade>
@@ -119,11 +120,12 @@ export function About() {
                 <span className="font-semibold text-primary">
                   Frontend Development
                 </span>
-                . Out of screen, I play{' '}
+                . Away from the screen, I train in{' '}
                 <span className="font-semibold text-primary">calisthenics</span>
-                , dive in the world of{' '}
-                <span className="font-semibold text-primary">music</span>. At
-                the same time, I'd love to take a pic of every moments.
+                , dive into the world of{' '}
+                <span className="font-semibold text-primary">music</span> and
+                enjoy capturing life's fleeting moments through{' '}
+                <span className="font-semibold text-primary">photography</span>.
               </p>
             </div>
           </BlurFade>

@@ -38,7 +38,7 @@ const PROJECTS = [
     href: 'https://github.com/you/ecommerce',
   },
   {
-    title: "Fu3rte's portfolio",
+    title: "Finnian's portfolio",
     description:
       'A minimalist digital sanctuary crafting high-performance interfaces with motion-first design philosophy',
     image: 'imgUrl',
@@ -47,6 +47,35 @@ const PROJECTS = [
   },
 ];
 
+function CurvedArrow({ className }: { className?: string }) {
+  return (
+    <svg
+      width="50"
+      height="70"
+      viewBox="0 0 50 70"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={cn(className)}
+    >
+      <path
+        d="M2 4C18 4 42 10 42 48"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        className="path-draw"
+      />
+      <path
+        d="M34 40L42 50L50 40"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="path-draw-arrow"
+      />
+    </svg>
+  );
+}
+
 export function Project() {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -54,8 +83,26 @@ export function Project() {
     () => {
       const cards = gsap.utils.toArray<HTMLElement>('.project-card-item');
 
-      cards.forEach((card, i) => {
-        gsap.set(card, { rotate: i % 2 === 0 ? 2 : -2 });
+      cards.forEach((card) => {
+        const initialRotation = gsap.utils.random(-3, 3);
+
+        gsap.set(card, { rotate: initialRotation });
+
+        card.addEventListener('mouseenter', () => {
+          gsap.to(card, {
+            rotate: 0,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        });
+
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, {
+            rotate: initialRotation,
+            duration: 0.3,
+            ease: 'power2.out',
+          });
+        });
 
         const tl = gsap.timeline({
           scrollTrigger: {
@@ -96,17 +143,6 @@ export function Project() {
             },
             '-=0.3'
           );
-
-        gsap.to(card, {
-          y: i % 2 === 0 ? -30 : -50,
-          ease: 'none',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: 1,
-          },
-        });
       });
     },
     { scope: containerRef }
@@ -114,12 +150,16 @@ export function Project() {
 
   return (
     <div
-      className="flex flex-col items-center space-y-4 px-6 py-10 lg:py-12"
+      className="relative flex flex-col items-center space-y-4 px-6 py-10 lg:py-12"
       ref={containerRef}
     >
-      <h1 className="mb-8 text-xl font-bold text-primary lg:self-center">
-        My Projects
-      </h1>
+      <div className="inline-flex items-start">
+        <h1 className="text-xl font-bold text-primary">My Projects</h1>
+
+        <div className="mt-3.5 ml-2">
+          <CurvedArrow className="text-primary/60 dark:text-primary/50" />
+        </div>
+      </div>
 
       <div className="card-container grid w-full grid-cols-1 gap-4 lg:grid-cols-2 lg:gap-8">
         {PROJECTS.map((project) => (

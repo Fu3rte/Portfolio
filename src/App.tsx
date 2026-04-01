@@ -1,6 +1,6 @@
 import { Navbar } from './components/Navbar/Navbar';
 import { ScrollProgress } from './components/WholePage/ScrollProgress';
-import { Pointer } from './components/customComponent/pointer';
+import { Pointer } from './components/customComponent/Pointer';
 
 import { DotPattern } from './components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
@@ -12,6 +12,8 @@ import { About } from './features/About/About';
 import { TechStack } from './features/TechStack/TechStack';
 import { Project } from './features/Project/Project';
 import { useEffect, useState } from 'react';
+import { Contact } from './features/Contact/Contact';
+import { Footer } from './features/Footer/Footer';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
@@ -41,7 +43,6 @@ function App() {
           <DotPattern
             className={cn(
               'fixed inset-0 z-0 opacity-[0.2]',
-              // 中心亮，四周淡出
               'mask-[radial-gradient(ellipse_at_center,white,transparent_90%)]'
             )}
             width={20}
@@ -62,6 +63,7 @@ function App() {
             <About />
             <TechStack />
             <Project />
+            <Footer />
           </main>
         </div>
       </Pointer>

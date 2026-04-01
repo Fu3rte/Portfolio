@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import './style.css';
 import { cn } from '@/lib/utils';
 import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
+import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 export function Navbar() {
   const [isActiveSection, setIsActiveSection] = useState('home');
@@ -38,12 +39,20 @@ export function Navbar() {
           : 'backdrop-blur-sm'
       )}
     >
-      <a
-        className="logo text-2xl transition-opacity duration-300 hover:opacity-70"
-        onClick={() => handleJumpToTop('home')}
-      >
-        Fu3rte
-      </a>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <a
+            className="logo text-2xl transition-opacity duration-300 hover:opacity-70"
+            onClick={() => handleJumpToTop('home')}
+          >
+            F1nn
+          </a>
+        </TooltipTrigger>
+
+        <TooltipContent className="ml-1">
+          <p>Back to top of the Home Page</p>
+        </TooltipContent>
+      </Tooltip>
 
       <div className="nav-links flex-center gap-4 md:gap-10">
         <a
@@ -75,9 +84,9 @@ export function Navbar() {
         >
           Blogs
         </a>
-      </div>
 
-      <AnimatedThemeToggler />
+        <AnimatedThemeToggler />
+      </div>
     </div>
   );
 }
