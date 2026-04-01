@@ -1,6 +1,6 @@
 import { Navbar } from './components/Navbar/Navbar';
 import { ScrollProgress } from './components/WholePage/ScrollProgress';
-import { Pointer } from './components/customComponent/Pointer';
+import { Pointer } from './components/WholePage/Pointer';
 
 import { DotPattern } from './components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
