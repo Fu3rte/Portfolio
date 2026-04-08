@@ -12,8 +12,9 @@ import { About } from './features/About/About';
 import { TechStack } from './features/TechStack/TechStack';
 import { Project } from './features/Project/Project';
 import { useEffect, useState } from 'react';
-/* import { Contact } from './features/Contact/Contact';
- */ import { Footer } from './features/Footer/Footer';
+import { Footer } from './features/Footer/Footer';
+import { PhotosPreview } from './features/Photos/PhotosPreview';
+import { Contact } from './features/Contact/Contact';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
@@ -58,11 +59,14 @@ function App() {
             </p>
           )}
 
-          <main className="relative z-10 flex flex-col px-4 md:max-w-[80vw] lg:px-8">
+          <main className="relative z-10 flex flex-col px-8 md:max-w-[80vw]">
             <Hero />
             <About />
             <TechStack />
             <Project />
+            <PhotosPreview />
+            <div className="md:h-[10vh]" />
+            <Contact />
             <Footer />
           </main>
         </div>

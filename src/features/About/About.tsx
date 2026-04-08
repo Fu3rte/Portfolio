@@ -149,7 +149,7 @@ export function About() {
                 >
                   <Badge
                     variant="outline"
-                    className="rounded-full border-primary/20 bg-primary/2 px-5 py-3 text-sm text-muted-foreground backdrop-blur-sm transition-all duration-300 hover:scale-105 hover:border-primary/70 hover:text-primary"
+                    className="glass-card rounded-full px-5 py-3 text-sm text-muted-foreground transition-all duration-300 hover:scale-105 hover:border-primary/70 hover:text-primary dark:bg-linear-[#fff2,transparent] dark:shadow-["
                   >
                     <span className="mr-2">{item.emoji}</span>
                     {item.label}

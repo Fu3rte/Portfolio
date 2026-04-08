@@ -7,7 +7,7 @@ import { OrbitingCircles } from '@/components/ui/orbiting-circles';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 
 import avatarUrl from '@/assets/sarff.jpg';
-import raectUrl from '@/assets/react.svg';
+import reactUrl from '@/assets/react.svg';
 import chromeUrl from '@/assets/chrome.svg';
 import geminiUrl from '@/assets/gemini.svg';
 
@@ -27,7 +27,7 @@ export function Hero() {
             />
 
             <img
-              src={raectUrl}
+              src={reactUrl}
               alt="React"
               className="size-12 object-contain"
             />
@@ -49,7 +49,7 @@ export function Hero() {
         </div>
 
         <TiltCard>
-          <Card className="z-10 flex w-84 flex-col bg-background/90">
+          <Card className="z-10 flex w-84 flex-col bg-background/0">
             <CardHeader className="items-center space-y-3 py-2">
               <Badge
                 variant="outline"
@@ -67,7 +67,7 @@ export function Hero() {
                   Hello, I'm
                 </p>
                 <h1 className="mt-1 text-3xl font-extrabold tracking-tight text-primary">
-                  Fu3rte
+                  Finnian
                 </h1>
               </div>
             </CardHeader>
@@ -93,7 +93,7 @@ export function Hero() {
 
               <div className="flex w-full justify-around text-center">
                 <div>
-                  <p className="text-lg font-bold text-primary">2+</p>
+                  <p className="text-lg font-bold text-primary">2</p>
                   <p className="text-[0.6rem] tracking-wider text-primary/55 uppercase">
                     Projects
                   </p>

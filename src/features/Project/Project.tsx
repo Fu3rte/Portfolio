@@ -40,7 +40,7 @@ const PROJECTS = [
   {
     title: "Finnian's portfolio",
     description:
-      'A minimalist digital sanctuary crafting high-performance interfaces with motion-first design philosophy',
+      'A minimalist digital sanctuary crafting high-performance interfaces with visual-first design philosophy',
     image: 'imgUrl',
     tags: ['React', 'Tailwind CSS', 'Shadcn UI', 'Gsap'],
     href: 'https://github.com/you/music-player',

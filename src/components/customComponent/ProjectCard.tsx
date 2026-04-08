@@ -104,7 +104,7 @@ function ProjectCardTags({
       {tags.map((tag) => (
         <span
           key={tag}
-          className="relative rounded-full border border-primary/8 bg-linear-to-b from-primary/10 to-primary/2 px-3 py-1 text-xs tracking-wider text-primary/75 shadow-[0_25px_25px_rgba(0,0,0,0.04),inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_2px_rgba(0,0,0,0.02)] backdrop-blur-md dark:border-white/10 dark:border-t-white/20 dark:bg-linear-to-b dark:from-white/10 dark:to-transparent dark:text-white/70 dark:shadow-[0_2px_8px_rgba(0,0,0,0.4),inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_2px_rgba(255,255,255,0.05)]"
+          className="relative rounded-full border border-primary/8 bg-linear-to-b from-primary/10 to-primary/2 px-3 py-1 text-xs tracking-wider text-primary/75 shadow-[inset_0_1px_1px_rgba(255,255,255,1),inset_0_-1px_2px_rgba(0,0,0,0.02)] backdrop-blur-md dark:border-white/10 dark:border-t-white/20 dark:bg-linear-to-b dark:from-white/10 dark:to-transparent dark:text-white/70 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.15),inset_0_-1px_2px_rgba(255,255,255,0.05)]"
         >
           {tag}
         </span>

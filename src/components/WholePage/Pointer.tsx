@@ -67,15 +67,8 @@ export function Pointer({ children }: { children: React.ReactNode }) {
 
       if (target && !isHovering.current) {
         isHovering.current = true;
-        const text = target.getAttribute('data-pointer');
-
         gsap.to(wrapper, { scale: 0.8, rotate: -10, duration: 0.3 });
         gsap.to(path, { fill: '#007bff', stroke: '#007bff', duration: 0.2 });
-
-        if (text) {
-          label.textContent = text;
-          gsap.to(label, { opacity: 1, scale: 1, duration: 0.2 });
-        }
       } else if (!target && isHovering.current) {
         isHovering.current = false;
         gsap.to(wrapper, { scale: 1, rotate: 0, duration: 0.3 });

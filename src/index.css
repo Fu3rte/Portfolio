@@ -158,17 +158,17 @@
         rotate(calc((var(--angle) * -1deg) - 360deg));
     }
   }
-  --animate-rippling: rippling var(--duration) ease-out
-;
+  --animate-rippling: rippling var(--duration) ease-out;
   @keyframes rippling {
-  0% {
-    opacity: 1;
+    0% {
+      opacity: 1;
     }
-  100% {
-    transform: scale(2);
-    opacity: 0;
+    100% {
+      transform: scale(2);
+      opacity: 0;
     }
-  }}
+  }
+}
 
 @layer base {
   * {
@@ -254,4 +254,10 @@ body {
 ::view-transition-new(root) {
   animation: none;
   mix-blend-mode: normal;
+}
+
+@layer components {
+  .glass-card {
+    @apply relative overflow-hidden border border-white/20 bg-white/10 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.3),0_4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-xl dark:border-[rgba(255,255,255,0.1)] dark:bg-black/20 dark:shadow-[inset_1px_1px_1px_rgba(255,255,255,0.05),0_4px_6px_-1px_rgba(0,0,0,0.15)];
+  }
 }

@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react';
 import './style.css';
 import { cn } from '@/lib/utils';
 import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '../customComponent/Tooltip';
 
 export function Navbar() {
   const [isActiveSection, setIsActiveSection] = useState('home');
