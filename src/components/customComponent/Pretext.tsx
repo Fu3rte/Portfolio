@@ -45,7 +45,7 @@ export function TextMeasure({
   font,
   lineHeight,
   className,
-  bounceAreaId, // 新增参数
+  bounceAreaId,
 }: {
   text: string;
   maxWidth: number;
@@ -60,7 +60,7 @@ export function TextMeasure({
   const isDragging = useRef(false);
   const dragOffset = useRef({ x: 0, y: 0 });
 
-  const orbState = useRef<Orb>({ x: 180, y: 80, r: 45, vx: 0.8, vy: 0.6 });
+  const orbState = useRef<Orb>({ x: 180, y: 80, r: 45, vx: 0.2, vy: 0.3 });
   const targetOrb = useRef({ x: 180, y: 80 }); 
 
   // 记录外部区域相对当前文字容器的位置，作为物理墙壁
@@ -173,7 +173,6 @@ export function TextMeasure({
       // 渲染光球
       if (orbRef.current) {
         orbRef.current.style.transform = `translate(${x - r}px, ${y - r}px)`;
-        orbRef.current.style.cursor = isDragging.current ? 'grabbing' : 'grab';
       }
 
       // 2. 实时重计算文字排版布局
@@ -246,17 +245,17 @@ export function TextMeasure({
       className={`relative w-full ${className || ''}`}
       style={{ maxWidth, overflow: 'visible', touchAction: 'none' }}
     >
-      {/* 发光球体 - 此时所有的事件绑定都在球体身上 */}
       <div
         ref={orbRef}
+        data-pointer
         className="absolute rounded-full"
         style={{
           width: orbState.current.r * 2,
           height: orbState.current.r * 2,
           top: 0,
           left: 0,
-          background: 'radial-gradient(circle, rgba(255,200,150,0.6) 0%, rgba(255,180,130,0.3) 40%, rgba(255,150,100,0.1) 70%, transparent 100%)',
-          boxShadow: '0 0 40px 20px rgba(255,180,130,0.3), inset 0 0 20px 5px rgba(255,200,150,0.2)',
+          background: 'rgba(0,123,255,0.35)',
+          boxShadow: '0 0 40px 20px rgba(0,123,255,0.3), inset 0 0 20px 5px rgba(0,150,255,0.2)',
           zIndex: 10,
           willChange: 'transform',
         }}

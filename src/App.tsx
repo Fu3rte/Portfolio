@@ -66,7 +66,11 @@ function App() {
             <Project />
             <PhotosPreview />
             <div className="md:h-[10vh]" />
-            <Contact />
+            <div>
+              <h1 className="flex-center h-[60dvh] flex-col text-6xl font-extrabold text-primary uppercase md:text-8xl">
+                contact
+              </h1>
+            </div>
             <Footer />
           </main>
         </div>
