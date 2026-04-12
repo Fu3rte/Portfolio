@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { Mail, MessageCircle, ArrowRight } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { AnimatedThemeToggler } from '../ui/animated-theme-toggler';
-import { Button } from '../ui/button';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import './style.css';
 
 const HamburgerButton = ({
   isHovered,
@@ -50,7 +52,7 @@ const HamburgerButton = ({
         'relative flex h-11 w-11 items-center justify-center rounded-full',
         'transition-all duration-500',
         'active:scale-[0.95]',
-        'z-[60] pointer-events-auto' // ✨ 给汉堡按钮 z-60 层级，并开启独立点击事件（Radix 会禁用外部 pointer events）
+        'pointer-events-auto z-60' // ✨ 给汉堡按钮 z-60 层级，并开启独立点击事件（Radix 会禁用外部 pointer events）
       )}
       aria-label={isOpen ? 'Close menu' : 'Open menu'}
     >
@@ -74,32 +76,109 @@ const HamburgerButton = ({
   );
 };
 
-const socialLinks =[
-  { icon: Mail, label: 'Email', href: 'mailto:example@example.com' },
-  { icon: MessageCircle, label: 'WeChat', href: '#' },
+const socialLinks = [
+  { label: 'Email:', value: '2575716528@qq.com' },
+  { label: 'WeChat:', value: 'f1nnnn_' },
 ];
 
-const menuItems =[
-  { label: 'Home', href: '#home' },
-  { label: 'Photos', href: '#photos' },
-  { label: 'Contact', href: '#contact' },
+const menuItems = [
+  { label: 'home', href: '/' },
+  { label: 'photos', href: '/photos' },
 ];
 
 export function Navbar() {
-  const[isActiveSection, setIsActiveSection] = useState('home');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isActiveSection =
+    menuItems.find((item) => item.href === location.pathname)?.label ?? 'home';
+
   const [isOpen, setIsOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleJumpToSection = (targetSection: string) => {
-    window.location.hash = targetSection;
-    setIsActiveSection(targetSection);
-    setIsOpen(false);
+  const menuItemsRef = useRef<(HTMLAnchorElement | null)[]>([]);
+  const navRef = useRef<HTMLDivElement>(null);
+  const tlRef = useRef<gsap.core.Timeline | null>(null);
+
+  const handleJumpToSection = (href: string) => {
+    navigate(href);
+    handleCloseWithAnimation();
   };
 
   const handleJumpToTop = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // Set up GSAP animation on mount
+  useGSAP(() => {
+    const menuEls = menuItemsRef.current.filter(Boolean);
+    if (menuEls.length === 0) return;
+
+    // Set initial state: hidden off-screen left
+    gsap.set(menuEls, { x: -80, opacity: 0 });
+
+    // Open animation timeline
+    const openTl = gsap.timeline({
+      paused: true,
+      onComplete: () => {
+        // Mark as ready after open animation completes
+      },
+    });
+    openTl.to(menuEls, {
+      x: 0,
+      opacity: 1,
+      duration: 0.5,
+      stagger: 0.08,
+      ease: 'power3.out',
+    });
+
+    // Close animation timeline
+    const closeTl = gsap.timeline({
+      paused: true,
+      onComplete: () => {
+        // After close animation, actually close the sheet
+        setIsOpen(false);
+      },
+    });
+    closeTl.to(menuEls, {
+      x: -80,
+      opacity: 0,
+      duration: 0.35,
+      stagger: 0.05,
+      ease: 'power2.in',
+    });
+
+    tlRef.current = openTl;
+    tlRef.current.closeTl = closeTl;
+  });
+
+  // Control animation playback
+  useEffect(() => {
+    const tl = tlRef.current;
+    if (!tl) return;
+
+    if (isOpen) {
+      // Delay to let sheet slide-in animation complete first (~200ms)
+      const timeout = setTimeout(() => {
+        tl.play(0);
+      }, 250);
+      return () => clearTimeout(timeout);
+    }
+    // Note: Close animation is triggered via handleCloseWithAnimation
+  }, [isOpen]);
+
+  const handleCloseWithAnimation = () => {
+    const tl = tlRef.current;
+    if (tl?.closeTl) {
+      // Play close animation first, then close sheet
+      tl.closeTl.eventCallback('onComplete', () => {
+        setIsOpen(false);
+      });
+      tl.closeTl.play(0);
+    } else {
+      setIsOpen(false);
     }
   };
 
@@ -138,7 +217,7 @@ export function Navbar() {
               side="right"
               showCloseButton={false}
               portal={false} // ✨ 关键点：关闭 Portal，让其在 Navbar 这个组件内部渲染。此时遮罩是 z-50
-              className="w-[85%] max-w-sm border-l border-black/10 bg-background/95 backdrop-blur-2xl dark:border-white/10"
+              className="w-[85%] max-w-sm bg-background/95 backdrop-blur-2xl"
               onPointerDownOutside={(e) => {
                 // 防止点击汉堡按钮时产生冲突（Radix 检测外部点击默认会关闭并打断动画）
                 if ((e.target as Element).closest('.navbar-hamburger-btn')) {
@@ -146,65 +225,50 @@ export function Navbar() {
                 }
               }}
             >
-              <div className="flex h-full flex-col p-8">
-                <nav className="mt-16 flex flex-1 flex-col gap-2">
+              <div className="flex h-full flex-col justify-center space-y-8 p-8">
+                <nav
+                  ref={navRef}
+                  className="mt-16 flex flex-col space-y-4 overflow-hidden"
+                >
                   {menuItems.map((item, i) => (
-                    <a
-                      key={item.label}
-                      href={item.href}
-                      onClick={() =>
-                        handleJumpToSection(item.label.toLowerCase())
-                      }
-                      className={cn(
-                        'group flex items-center gap-4 py-4',
-                        'text-3xl font-semibold tracking-tight',
-                        'transition-all duration-300'
-                      )}
-                      style={{
-                        transitionDelay: `${i * 80 + 150}ms`,
-                      }}
-                    >
-                      <span
-                        className={cn(
-                          'h-2 w-2 rounded-full transition-all duration-300',
-                          'group-hover:scale-150'
-                        )}
-                        style={{
-                          backgroundColor:
-                            i === 0
-                              ? '#f97316'
-                              : i === 1
-                                ? '#3b82f6'
-                                : '#22c55e',
+                    <div>
+                      <a
+                        ref={(el) => {
+                          menuItemsRef.current[i] = el;
                         }}
-                      />
-                      <span className="transition-all duration-300 group-hover:translate-x-2">
+                        key={item.label}
+                        href={item.href}
+                        onClick={() => {
+                          handleJumpToSection(item.href);
+                        }}
+                        className={cn(
+                          'links-item group relative inline-block uppercase',
+                          'text-3xl font-semibold tracking-tight',
+                          item.label === isActiveSection && 'active'
+                        )}
+                      >
                         {item.label}
-                      </span>
-                    </a>
+                      </a>
+                    </div>
                   ))}
                 </nav>
 
                 {/* Social Links */}
-                <div className="flex flex-col gap-4 border-t border-black/10 pt-8 dark:border-white/10">
-                  <span className="text-xs font-medium tracking-[0.2em] text-muted-foreground uppercase">
-                    Get In Touch
+                <div className="social-links flex flex-col gap-3">
+                  <span className="social-links-header font-bold tracking-tight uppercase">
+                    Get In Touch ///
                   </span>
-                  <div className="flex gap-4">
+
+                  <div className="flex flex-col gap-2">
                     {socialLinks.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.href}
-                        target={link.href.startsWith('http') ? '_blank' : undefined}
-                        rel={link.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-                        className={cn(
-                          'flex h-10 w-10 items-center justify-center rounded-full',
-                          'bg-black/5 dark:bg-white/5',
-                          'transition-all duration-300 hover:scale-110 hover:bg-black/10 dark:hover:bg-white/10'
-                        )}
-                      >
-                        <link.icon className="h-4 w-4" />
-                      </a>
+                      <div key={link.label} className="flex items-center gap-3">
+                        <span className="social-links-label font-medium">
+                          {link.label}
+                        </span>
+                        <span className="social-links-value font-normal">
+                          {link.value}
+                        </span>
+                      </div>
                     ))}
                   </div>
                 </div>

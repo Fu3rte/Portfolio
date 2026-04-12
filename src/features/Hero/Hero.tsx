@@ -15,7 +15,7 @@ export function Hero() {
   return (
     <BlurFade inView={true} direction="up">
       <div
-        className="relative z-0 flex-center h-[110dvh] w-full flex-col"
+        className="pointer-events-none relative z-0 flex-center h-[110dvh] w-full flex-col"
         id="home"
       >
         <div className="absolute flex-center h-full w-full">
@@ -55,7 +55,7 @@ export function Hero() {
                 variant="outline"
                 className="gap-1.5 rounded-full border-primary/30 bg-primary/2 px-3 py-1 text-[0.6rem] tracking-[0.2em] text-primary/80 uppercase"
               >
-                <span className="relative flex size-1.5">
+                <span className="pointer-events-none relative flex size-1.5">
                   <span className="absolute inline-flex size-full animate-ping rounded-full bg-[#007bff] opacity-75" />
                   <span className="relative inline-flex size-1.5 rounded-full bg-[#007bff]" />
                 </span>

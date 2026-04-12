@@ -144,7 +144,7 @@ export function Footer() {
             </a>
 
             <a
-              href="#photos"
+              href="/photos"
               className="text-xs font-bold tracking-[0.2em] text-primary uppercase transition-opacity hover:opacity-50"
             >
               Photos

@@ -1,22 +1,20 @@
 import { Navbar } from './components/Navbar/Navbar';
 import { ScrollProgress } from './components/WholePage/ScrollProgress';
 import { Pointer } from './components/WholePage/Pointer';
+import Loading from './components/WholePage/Loading';
 
 import { DotPattern } from './components/ui/dot-pattern';
 import { cn } from '@/lib/utils';
 
 import { ThemeProvider } from './components/theme-provider';
 
-import { Hero } from './features/Hero/Hero';
-import { About } from './features/About/About';
-import { TechStack } from './features/TechStack/TechStack';
-import { Project } from './features/Project/Project';
 import { useEffect, useState } from 'react';
-import { Footer } from './features/Footer/Footer';
-import { PhotosPreview } from './features/Photos/PhotosPreview';
-import { Contact } from './features/Contact/Contact';
+import { Home } from './pages/Home';
+import { Photos } from './pages/Photos';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -35,7 +33,7 @@ function App() {
   }, []);
 
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Pointer>
         <Navbar />
         <ScrollProgress />
@@ -59,21 +57,13 @@ function App() {
             </p>
           )}
 
-          <main className="relative z-10 flex flex-col px-8 md:max-w-[80vw]">
-            <Hero />
-            <About />
-            <TechStack />
-            <Project />
-            <PhotosPreview />
-            <div className="md:h-[10vh]" />
-            <div>
-              <h1 className="flex-center h-[60dvh] flex-col text-6xl font-extrabold text-primary uppercase md:text-8xl">
-                contact
-              </h1>
-            </div>
-            <Footer />
-          </main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/photos" element={<Photos />} />
+          </Routes>
         </div>
+
+        {isLoading && <Loading onComplete={() => setIsLoading(false)} />}
       </Pointer>
     </ThemeProvider>
   );
