@@ -1,0 +1,21 @@
+[
+  {
+    "id": "1",
+    "src": "/photos/photo (1).png",
+    "metadata": {
+      "title": "Mountain Sunrise",
+      "description": "Early morning view from the peak",
+      "date": "2024-03-15",
+      "location": "Alps, Switzerland"
+    }
+  },
+  {
+    "id": "2",
+    "src": "/photos/photo (2).png",
+    "metadata": {
+      "title": "Ocean Waves",
+      "description": "Pacific coast at sunset",
+      "date": "2024-03-10"
+    }
+  }
+]
