@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-const CONTACT_TEXT = 'Contact';
+gsap.registerPlugin(ScrollToPlugin);
 
-// 物理参数
-const LINK_LENGTH = 24;
+const CONTACT_TEXT = 'contact me';
+
+// Chain physics constants
+const LINK_LENGTH = 20;
 const GRAVITY = 0.55;
 const FRICTION = 0.92;
 const BOUNCE = 0.45;
 const ITERATIONS = 6;
 const PICK_RADIUS = 40;
 const ENTRY_SWAY = 0.18;
+const RETURN_CHAIN_MULTIPLIER = 1.9;
+const RETURN_SCROLL_DURATION = 0.65;
 
 type NodePoint = {
   x: number;
@@ -28,8 +33,8 @@ function distanceSq(ax: number, ay: number, bx: number, by: number) {
   return dx * dx + dy * dy;
 }
 
-const PRETEXT = 'Drag me !!!';
-const PRETEXT_TRACK = -0.04;
+const PRETEXT = 'DRAG ME!';
+const CHARS = PRETEXT.split('');
 const PRETEXT_FONT_SIZE = '0.9rem';
 
 export function HomePageContact() {
@@ -42,8 +47,9 @@ export function HomePageContact() {
   const entrySwayRef = useRef(0);
   const hasEnteredViewRef = useRef(false);
   const isVisibleRef = useRef(false);
+  const returnArmedRef = useRef(false);
+  const returnTriggeredThisDragRef = useRef(false);
   const [isVisible, setIsVisible] = useState(false);
-  const chars = PRETEXT.split('');
 
   useEffect(() => {
     const init = () => {
@@ -58,7 +64,7 @@ export function HomePageContact() {
 
       pointsRef.current = PRETEXT.split('').map((ch, index) => {
         const x = contactCenterX;
-        const y = startY + index * 5;
+        const y = startY + index * 4;
         const existingEl = pointsRef.current[index]?.el || null;
         return {
           x,
@@ -114,6 +120,18 @@ export function HomePageContact() {
 
       if (entrySwayRef.current > 0) {
         entrySwayRef.current = Math.max(0, entrySwayRef.current - 0.016);
+      }
+
+      const chainLength = points.reduce((sum, point, index) => {
+        if (index === 0) return 0;
+        const prev = points[index - 1];
+        return sum + Math.hypot(point.x - prev.x, point.y - prev.y);
+      }, 0);
+
+      if (draggingRef.current) {
+        returnArmedRef.current =
+          returnArmedRef.current ||
+          chainLength > LINK_LENGTH * (points.length - 1) * RETURN_CHAIN_MULTIPLIER;
       }
 
       const entrySway = entrySwayRef.current * ENTRY_SWAY;
@@ -231,6 +249,8 @@ export function HomePageContact() {
       }
 
       if (closest) {
+        returnArmedRef.current = false;
+        returnTriggeredThisDragRef.current = false;
         draggingRef.current = true;
         draggedPointRef.current = closest;
         mouseRef.current = { x: e.clientX, y: e.clientY };
@@ -244,6 +264,17 @@ export function HomePageContact() {
     };
 
     const handlePointerUp = () => {
+      if (returnArmedRef.current && !returnTriggeredThisDragRef.current) {
+        returnTriggeredThisDragRef.current = true;
+        gsap.to(window, {
+          scrollTo: 0,
+          duration: RETURN_SCROLL_DURATION,
+          ease: 'power2.inOut',
+          overwrite: true,
+        });
+      }
+
+      returnArmedRef.current = false;
       draggingRef.current = false;
       draggedPointRef.current = null;
     };
@@ -282,7 +313,7 @@ export function HomePageContact() {
           className="pointer-events-none fixed inset-0 z-50"
           style={{ width: '100vw', height: '100vh' }}
         >
-          {chars.map((ch, index) => (
+          {CHARS.map((ch, index) => (
             <div
               key={`${ch}-${index}`}
               ref={(el) => {
@@ -290,7 +321,7 @@ export function HomePageContact() {
                   pointsRef.current[index].el = el;
                 }
               }}
-              className="absolute top-0 left-0 select-none"
+              className="absolute top-0 left-0 text-[#007bff] select-none"
               style={{
                 transformOrigin: 'center center',
                 userSelect: 'none',
@@ -303,10 +334,7 @@ export function HomePageContact() {
               <span
                 style={{
                   fontSize: PRETEXT_FONT_SIZE,
-                  letterSpacing:
-                    index === 0
-                      ? `${PRETEXT_TRACK}em`
-                      : `${PRETEXT_TRACK * 1.25}em`,
+                  letterSpacing: '1rem',
                   lineHeight: 1,
                 }}
               >

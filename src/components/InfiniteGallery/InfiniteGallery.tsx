@@ -15,8 +15,11 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const photosRef = useRef<CanvasPhoto[]>([]);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const overlayCardRef = useRef<HTMLDivElement>(null);
   const overlayImageRef = useRef<HTMLImageElement>(null);
+  const overlayTlRef = useRef<gsap.core.Timeline | null>(null);
   const isDragging = useRef(false);
+  const didDrag = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
@@ -24,13 +27,18 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const photosPerLine = 7;
 
   const photoGrid = useMemo(() => {
+    const columnStep = photoWidth + gap;
+    const rowOffset = columnStep / 2;
+
     return photos.map((photo, index) => {
       const col = index % photosPerLine;
       const row = Math.floor(index / photosPerLine);
+      const staggerX = row % 2 === 1 ? rowOffset : 0;
+
       return {
         ...photo,
         id: photo.id ?? index,
-        x: col * (photoWidth + gap),
+        x: col * columnStep + staggerX,
         y: row * (photoHeight + lineGap),
         movX: 0,
         movY: 0,
@@ -63,12 +71,43 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     const img = new Image();
     img.src = selectedPhoto.src;
     overlayImageRef.current = img;
+
+    overlayTlRef.current?.kill();
+    gsap.set(overlayRef.current, { autoAlpha: 0 });
+    gsap.set(overlayCardRef.current, { autoAlpha: 0, y: 24, scale: 0.96 });
+
+    overlayTlRef.current = gsap.timeline();
+    overlayTlRef.current
+      .to(overlayRef.current, {
+        autoAlpha: 1,
+        duration: 0.18,
+        ease: 'power1.out',
+      })
+      .to(
+        overlayCardRef.current,
+        {
+          autoAlpha: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.5,
+          ease: 'power4.out',
+        },
+        0.02
+      );
   }, [selectedPhoto]);
 
+  useEffect(() => {
+    return () => {
+      overlayTlRef.current?.kill();
+    };
+  }, []);
+
   const bounds = useMemo(() => {
-    const containerWidth = photosPerLine * (photoWidth * scale + gap * scale) - gap * scale;
+    const containerWidth =
+      photosPerLine * (photoWidth * scale + gap * scale) - gap * scale;
     const rows = Math.ceil(photos.length / photosPerLine);
-    const containerHeight = rows * (photoHeight * scale + lineGap * scale) - lineGap * scale;
+    const containerHeight =
+      rows * (photoHeight * scale + lineGap * scale) - lineGap * scale;
     return {
       containerWidth,
       containerHeight,
@@ -203,7 +242,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      movePhotos(e.deltaX, e.deltaY);
+      movePhotos(e.deltaX, -e.deltaY);
     };
 
     canvas.addEventListener('wheel', handleWheel, { passive: false });
@@ -233,35 +272,43 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     return null;
   }, []);
 
-  const handlePointerDown = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
-    isDragging.current = true;
-    lastMouse.current = { x: e.clientX, y: e.clientY };
-    e.currentTarget.setPointerCapture(e.pointerId);
-  }, []);
+  const handlePointerDown = useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      isDragging.current = true;
+      didDrag.current = false;
+      lastMouse.current = { x: e.clientX, y: e.clientY };
+      e.currentTarget.setPointerCapture(e.pointerId);
+    },
+    []
+  );
 
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       if (!isDragging.current) return;
       const dx = e.clientX - lastMouse.current.x;
       const dy = e.clientY - lastMouse.current.y;
+
+      if (Math.abs(dx) > 0 || Math.abs(dy) > 0) {
+        didDrag.current = true;
+      }
+
       movePhotos(dx, dy);
       lastMouse.current = { x: e.clientX, y: e.clientY };
     },
     [movePhotos]
   );
-  
+
   const openPhoto = useCallback((photo: PhotoItem) => {
     setSelectedPhoto(photo);
-    gsap.fromTo(
-      overlayRef.current,
-      { autoAlpha: 0 },
-      { autoAlpha: 1, duration: 0.25, ease: 'power2.out' }
-    );
   }, []);
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {
-      if (isDragging.current) return;
+      if (didDrag.current) {
+        didDrag.current = false;
+        return;
+      }
+
       const photo = findPhotoAtPoint(e.clientX, e.clientY);
       if (photo) {
         openPhoto({
@@ -276,27 +323,48 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     [findPhotoAtPoint, openPhoto]
   );
 
-  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLCanvasElement>) => {
-    isDragging.current = false;
-    try {
-      e.currentTarget.releasePointerCapture(e.pointerId);
-    } catch {
-      // ignore
-    }
-  }, []);
+  const handlePointerUp = useCallback(
+    (e: React.PointerEvent<HTMLCanvasElement>) => {
+      isDragging.current = false;
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+        // ignore
+      }
+    },
+    []
+  );
 
   const handlePointerLeave = useCallback(() => {
     isDragging.current = false;
   }, []);
 
-
   const closePhoto = useCallback(() => {
-    gsap.to(overlayRef.current, {
-      autoAlpha: 0,
-      duration: 0.2,
-      ease: 'power2.in',
+    if (overlayTlRef.current) {
+      overlayTlRef.current.kill();
+    }
+
+    overlayTlRef.current = gsap.timeline({
       onComplete: () => setSelectedPhoto(null),
     });
+
+    overlayTlRef.current
+      .to(overlayCardRef.current, {
+        y: 18,
+        scale: 0.96,
+        autoAlpha: 0,
+        duration: 0.22,
+        ease: 'power2.in',
+      })
+      .to(
+        overlayRef.current,
+        {
+          autoAlpha: 0,
+          duration: 0.18,
+          ease: 'power2.inOut',
+        },
+        0.04
+      );
   }, []);
 
   return (
@@ -314,34 +382,33 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
       {selectedPhoto ? (
         <div
           ref={overlayRef}
-          className="absolute inset-0 z-20 flex items-center justify-center bg-black/70 px-6 backdrop-blur-md"
+          className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden bg-black/70 px-6 backdrop-blur-xl"
           onClick={closePhoto}
         >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.12),rgba(0,0,0,0.65)_60%,rgba(0,0,0,0.85)_100%)]" />
           <div
-            className="grid w-full max-w-5xl gap-6 rounded-[32px] border border-white/10 bg-white/8 p-4 text-white shadow-2xl md:grid-cols-[1.2fr_0.8fr] md:p-6"
-            onClick={(e) => e.stopPropagation()}
+            ref={overlayCardRef}
+            className="relative z-10 flex max-h-[86vh] w-full max-w-4xl flex-col items-center gap-6"
+            onClick={closePhoto}
           >
-            <div className="overflow-hidden rounded-[24px] bg-black/20">
+            <div className="overflow-hidden rounded-[30px] border border-white/10 bg-black/20 shadow-2xl">
               <img
                 ref={overlayImageRef}
                 src={selectedPhoto.src}
                 alt={selectedPhoto.title}
-                className="h-full w-full object-cover"
+                className="max-h-[68vh] w-auto max-w-full object-contain"
               />
             </div>
-            <div className="flex flex-col justify-between gap-6 p-2 md:p-4">
-              <div className="space-y-4">
-                <p className="text-xs uppercase tracking-[0.35em] text-white/60">{selectedPhoto.location}</p>
-                <h2 className="text-3xl font-semibold md:text-5xl">{selectedPhoto.title}</h2>
-                <p className="max-w-md text-sm leading-7 text-white/75 md:text-base">{selectedPhoto.description}</p>
-              </div>
-              <button
-                type="button"
-                className="self-start rounded-full border border-white/20 px-5 py-2 text-sm font-medium text-white/90 transition hover:bg-white/10"
-                onClick={closePhoto}
-              >
-                Close
-              </button>
+            <div className="space-y-3 text-center text-white">
+              <p className="text-xs tracking-[0.35em] text-white/60 uppercase">
+                {selectedPhoto.location}
+              </p>
+              <h2 className="text-2xl font-semibold md:text-4xl">
+                {selectedPhoto.title}
+              </h2>
+              <p className="mx-auto max-w-md text-sm leading-7 text-white/75 md:text-base">
+                {selectedPhoto.description}
+              </p>
             </div>
           </div>
         </div>
