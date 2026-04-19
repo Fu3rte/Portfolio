@@ -84,6 +84,7 @@ const socialLinks = [
 const menuItems = [
   { label: 'home', href: '/' },
   { label: 'photos', href: '/photos' },
+  { label: 'contact', href: '/contact' },
 ];
 
 export function Navbar({

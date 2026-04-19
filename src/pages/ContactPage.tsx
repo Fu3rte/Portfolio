@@ -1,4 +1,3 @@
-import { TextMeasure } from '@/components/customComponent/BallPretext';
 import { Input } from '@/components/customComponent/Input';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
@@ -6,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-export function Contact() {
+export function ContactPage() {
   useGSAP(() => {
     // 标题淡入上移
     gsap.from('.contact-header', {
@@ -61,10 +60,10 @@ export function Contact() {
   });
 
   return (
-    <div className="relative flex w-full flex-col items-center px-6 py-10 lg:px-0 lg:py-20">
-      <div className="grid w-full grid-cols-1 lg:grid-cols-10">
+    <div className="relative flex-center min-h-svh w-full flex-col px-6 py-10 lg:px-0 lg:py-20">
+      <div className="flex-center w-full flex-1 flex-col gap-12 px-2 py-8 md:flex-row">
         {/* 左侧表单部分 */}
-        <div className="flex flex-col px-4 py-4 lg:col-span-4 lg:py-8">
+        <div className="md:w-2/5 lg:w-3/7">
           <div className="flex flex-col gap-1">
             <h1 className="contact-header text-4xl font-bold text-primary">
               Get In Touch {':]'}
@@ -85,22 +84,22 @@ export function Contact() {
             <div className="contact-input">
               <Input text="MESSAGE" type="text" />
             </div>
+            <button
+              type="submit"
+              className="mt-2 inline-flex items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              Submit
+            </button>
           </form>
         </div>
 
-        <div
-          id="orb-bounce-area"
-          className="relative flex min-h-75 items-center justify-center rounded-xl lg:col-span-6 lg:pl-12"
-        >
+        <div id="orb-bounce-area" className="">
           <div className="relative flex w-full max-w-100 p-4 lg:p-6">
-            <TextMeasure
-              bounceAreaId="orb-bounce-area"
-              text="Every great project starts with a conversation. Whether you have an idea, a problem to solve, or just want to say hello, I'm all ears."
-              maxWidth={300}
-              font="italic 500 20px Inter"
-              lineHeight={32}
-              className="text-left text-primary/90"
-            />
+            <p className="text-primary/90">
+              Every great project starts with a conversation. Whether you have
+              an idea, a problem to solve, or just want to say hello, I'm all
+              ears.
+            </p>
           </div>
         </div>
       </div>

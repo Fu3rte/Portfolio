@@ -14,7 +14,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 const socialLinks = [
   {
     label: 'Email',
-    href: 'mailto:example@example.com',
+    href: 'mailto:2575716528cqh@gmail.com',
     img: mailSvg,
   },
   {
@@ -137,21 +137,21 @@ export function Footer() {
           {/* Left: Navigation links */}
           <nav className="flex items-center gap-8">
             <a
-              href="#home"
+              href=""
               className="text-xs font-bold tracking-[0.2em] text-primary uppercase transition-opacity hover:opacity-50"
             >
               Home
             </a>
 
             <a
-              href="/photos"
+              href="photos"
               className="text-xs font-bold tracking-[0.2em] text-primary uppercase transition-opacity hover:opacity-50"
             >
               Photos
             </a>
 
             <a
-              href="#contact"
+              href="contact"
               className="text-xs font-bold tracking-[0.2em] text-primary uppercase transition-opacity hover:opacity-50"
             >
               Contact
