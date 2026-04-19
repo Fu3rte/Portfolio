@@ -42,7 +42,6 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     scaleNums.current = window.innerWidth / standardWidth;
     containerRef.current.style.transform = `scale(${scaleNums.current})`;
     containerRef.current.style.transformOrigin = 'center center';
-
     gsap.to(
       imgs.map((img) => img.node),
       {
