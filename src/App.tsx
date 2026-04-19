@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 
 import { ThemeProvider } from './components/theme-provider';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { HomePage } from './pages/HomePage';
 import { PhotosPage } from './pages/PhotosPage';
 import { ContactPage } from './pages/ContactPage';
@@ -16,7 +16,6 @@ import { Route, Routes } from 'react-router-dom';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
- 
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
@@ -36,8 +35,6 @@ function App() {
             cy={1}
             cr={1}
           />
-
-          
 
           <Routes>
             <Route path="/" element={<HomePage />} />
