@@ -2,13 +2,14 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 
 interface LoadingProps {
+  isMobile: boolean;
   onComplete?: () => void;
 }
 
-const TOTAL_BARS = 8;
-const NAME = 'Fu3rte';
+export default function Loading({ isMobile, onComplete }: LoadingProps) {
+  const TOTAL_BARS = isMobile ? 3 : 8;
+  const NAME = 'Fu3rte';
 
-export default function Loading({ onComplete }: LoadingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const nameRef = useRef<HTMLDivElement>(null);
 

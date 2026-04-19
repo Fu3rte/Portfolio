@@ -48,12 +48,18 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
 
   useEffect(() => {
     const handleResize = () => {
-      setScale(Math.min(1, window.innerWidth / standardWidth));
+      const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
+      setScale(Math.max(1, standardWidth / viewportWidth));
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    window.visualViewport?.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.visualViewport?.removeEventListener('resize', handleResize);
+    };
   }, [standardWidth]);
 
   useEffect(() => {
