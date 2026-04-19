@@ -29,7 +29,6 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     });
   }
 
-  // Include trailing gap for seamless wrap-around
   const containerWidth = photoWidth * photosPerLine + gap * photosPerLine;
   const containerHeight =
     photoLines.length * photoHeight + lineGap * photoLines.length;
