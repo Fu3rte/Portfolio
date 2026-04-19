@@ -35,7 +35,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <Pointer>
-        <Navbar />
+        <Navbar setIsLoading={setIsLoading} />
         <ScrollProgress />
 
         <div className="relative flex-center min-h-screen w-full flex-col bg-background">

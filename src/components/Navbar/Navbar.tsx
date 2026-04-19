@@ -86,7 +86,11 @@ const menuItems = [
   { label: 'photos', href: '/photos' },
 ];
 
-export function Navbar() {
+export function Navbar({
+  setIsLoading,
+}: {
+  setIsLoading: (isLoading: boolean) => void;
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const isActiveSection =
@@ -101,14 +105,8 @@ export function Navbar() {
 
   const handleJumpToSection = (href: string) => {
     navigate(href);
+    setIsLoading(true);
     handleCloseWithAnimation();
-  };
-
-  const handleJumpToTop = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
   };
 
   // Set up GSAP animation on mount
@@ -193,7 +191,7 @@ export function Navbar() {
         <a
           // ✨ 给 Logo 限定 z-40 层级，这样它会被 z-50 的 SheetOverlay 覆盖并加上高斯模糊
           className="logo relative z-40 cursor-pointer text-2xl transition-opacity duration-300 hover:opacity-70"
-          onClick={() => handleJumpToTop('home')}
+          onClick={() => handleJumpToSection('')}
         >
           F1nn
         </a>

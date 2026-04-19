@@ -1,26 +1,28 @@
 export interface PhotoItem {
   id: number;
   src: string;
-  title?: string;
-  description?: string;
+  title: string;
+  location: string;
+  description: string;
 }
 
-export interface PhotoLine {
+export interface CanvasPhoto {
   id: number;
-  photos: PhotoItem[];
-}
-
-export interface PhotoData {
-  node: HTMLDivElement;
+  src: string;
+  title: string;
+  location: string;
+  description: string;
   x: number;
   y: number;
-  mov_x: number;
-  mov_y: number;
-  ani: gsap.core.Tween | null;
+  width: number;
+  height: number;
+  movX: number;
+  movY: number;
+  image?: HTMLImageElement;
 }
 
 export interface InfiniteGalleryProps {
-  photos: string[];
+  photos: PhotoItem[];
   photoWidth?: number;
   photoHeight?: number;
   gap?: number;

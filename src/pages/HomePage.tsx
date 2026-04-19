@@ -3,6 +3,7 @@ import { About } from '../features/About/About';
 import { TechStack } from '../features/TechStack/TechStack';
 import { Project } from '../features/Project/Project';
 import { Footer } from '../features/Footer/Footer';
+import { HomePageContact } from '@/features/HomePageContact/HomePageContact';
 
 export function HomePage() {
   return (
@@ -12,11 +13,7 @@ export function HomePage() {
       <TechStack />
       <Project />
       <div className="md:h-[10vh]" />
-      <div>
-        <h1 className="flex-center h-[60dvh] flex-col text-6xl font-extrabold text-primary uppercase md:text-8xl">
-          contact
-        </h1>
-      </div>
+      <HomePageContact />
       <Footer />
     </main>
   );

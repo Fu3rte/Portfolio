@@ -1,4 +1,4 @@
-import { TextMeasure } from '@/components/customComponent/Pretext';
+import { TextMeasure } from '@/components/customComponent/BallPretext';
 import { Input } from '@/components/customComponent/Input';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
