@@ -9,8 +9,8 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from './components/theme-provider';
 
 import { useEffect, useState } from 'react';
-import { Home } from './pages/Home';
-import { Photos } from './pages/Photos';
+import { HomePage } from './pages/HomePage';
+import { PhotosPage } from './pages/PhotosPage';
 import { Route, Routes } from 'react-router-dom';
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
         <Navbar />
         <ScrollProgress />
 
-        <div className="relative flex-center min-h-screen w-full flex-col overflow-hidden bg-background">
+        <div className="relative flex-center min-h-screen w-full flex-col bg-background">
           <DotPattern
             className={cn(
               'fixed inset-0 z-0 opacity-[0.2]',
@@ -58,8 +58,8 @@ function App() {
           )}
 
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/photos" element={<Photos />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/photos" element={<PhotosPage />} />
           </Routes>
         </div>
 

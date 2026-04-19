@@ -1,0 +1,11 @@
+@media screen and (max-aspect-ratio: 1.5/1) {
+  .gallery-wrapper {
+    font-size: 2px;
+  }
+}
+
+@media screen and (max-aspect-ratio: 0.8/1) {
+  .gallery-wrapper {
+    font-size: 2.8px;
+  }
+}

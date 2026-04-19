@@ -14,10 +14,7 @@ import geminiUrl from '@/assets/gemini.svg';
 export function Hero() {
   return (
     <BlurFade inView={true} direction="up">
-      <div
-        className="pointer-events-none relative z-0 flex-center h-[110dvh] w-full flex-col"
-        id="home"
-      >
+      <div className="relative z-0 flex-center h-dvh w-full flex-col" id="home">
         <div className="absolute flex-center h-full w-full">
           <OrbitingCircles className="h-full" radius={250}>
             <img
@@ -49,7 +46,7 @@ export function Hero() {
         </div>
 
         <TiltCard>
-          <Card className="z-10 flex w-84 flex-col bg-background/0">
+          <Card className="z-10 flex w-84 flex-col bg-background/0 py-5 xl:py-10">
             <CardHeader className="items-center space-y-3 py-2">
               <Badge
                 variant="outline"
@@ -122,7 +119,7 @@ export function Hero() {
         </TiltCard>
 
         {/* scroll hint */}
-        <div className="absolute bottom-20 flex-center flex-col gap-2">
+        <div className="absolute bottom-10 flex-center flex-col gap-2">
           <span className="font-mono text-[10px] tracking-[0.3em] text-primary/70 uppercase">
             Scroll
           </span>

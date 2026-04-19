@@ -259,4 +259,42 @@ body {
   .glass-card {
     @apply relative overflow-hidden border border-white/20 bg-white/10 shadow-[inset_1px_1px_2px_rgba(255,255,255,0.3),0_4px_6px_-1px_rgba(0,0,0,0.05)] backdrop-blur-xl dark:border-[rgba(255,255,255,0.1)] dark:bg-black/20 dark:shadow-[inset_1px_1px_1px_rgba(255,255,255,0.05),0_4px_6px_-1px_rgba(0,0,0,0.15)];
   }
+
+  /* Photos infinite scroll */
+  .photos {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .photos_line {
+    display: flex;
+    height: 342px;
+    margin-bottom: 48px;
+    flex-shrink: 0;
+  }
+
+  .photos_line_photo {
+    width: 234px;
+    height: 100%;
+    margin-right: 36px;
+    border-radius: 15px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .photos_line_photo img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    user-select: none;
+    transition: transform 0.3s ease;
+  }
+
+  .photos_line_photo:hover img {
+    transform: scale(1.2);
+  }
 }
