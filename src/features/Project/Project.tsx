@@ -16,7 +16,8 @@ import {
   ProjectCardCTA,
 } from '@/components/customComponent/ProjectCard';
 
-/* import imgUrl from '@/assets/sarff.jpg'; */
+import portfolioImg from '@/assets/Projects/portfolio.png';
+import algoCheck from '@/assets/Projects/AlgoCheck.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -25,7 +26,7 @@ const PROJECTS = [
     title: 'Algorithm Check-in Website',
     description:
       'A web application for daily algorithm practice check-ins, featuring progress tracking, leaderboards, and community features.',
-    image: 'imgUrl',
+    image: algoCheck,
     tags: ['React', 'axios', 'React Router'],
     href: 'https://github.com/you/travel-app',
   },
@@ -41,7 +42,7 @@ const PROJECTS = [
     title: "Finnian's portfolio",
     description:
       'A minimalist digital sanctuary crafting high-performance interfaces with visual-first design philosophy',
-    image: 'imgUrl',
+    image: portfolioImg,
     tags: ['React', 'Tailwind CSS', 'Shadcn UI', 'Gsap'],
     href: 'https://github.com/you/music-player',
   },

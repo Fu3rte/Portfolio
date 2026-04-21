@@ -112,12 +112,13 @@ function ProjectCardTags({
     </div>
   );
 }
+
 function ProjectCardCTA({ className, ...props }: React.ComponentProps<'a'>) {
   return (
     <a
       data-slot="card-cta"
       className={cn(
-        `inline-flex items-center gap-1.5 text-sm font-bold text-[#007bff] transition-colors`,
+        `inline-flex items-center gap-1.5 text-sm font-bold text-[#007bff] transition-colors hover:opacity-60`,
         className
       )}
       {...props}

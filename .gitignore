@@ -27,6 +27,8 @@ dist-ssr
 .claude/
 CLAUDE.md
 
+docs/
+
 # API configuration files
 *.env
 *.env.local

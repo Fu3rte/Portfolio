@@ -1,11 +1,24 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Input = ({ text, type }: { text: string; type: string }) => {
+export const Input = ({
+  text,
+  type,
+  name,
+}: {
+  text: string;
+  type: string;
+  name?: string;
+}) => {
   return (
     <StyledWrapper>
       <div className="wave-group">
-        <input required type={type} className="input text-primary/90" />
+        <input
+          required
+          type={type}
+          name={name}
+          className="input text-primary/90"
+        />
 
         <label className="label">
           {text.split('').map((char, index) => (
@@ -30,8 +43,8 @@ const StyledWrapper = styled.div`
   }
 
   .wave-group .input {
-    font-size: 16px;
-    padding: 10px 10px 10px 5px;
+    font-size: 1rem;
+    padding: 10px 10px 10px 15px;
     display: block;
     width: 100%;
     border-radius: 25px;
