@@ -18,7 +18,7 @@ import {
 
 import portfolioImg from '@/assets/Projects/portfolio.png';
 import algoCheck from '@/assets/Projects/AlgoCheck.png';
-import bidAudit from '@/assets/Projects/BidAudit.png';
+import bidAudit from '@/assets/Projects/bidAudit.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
