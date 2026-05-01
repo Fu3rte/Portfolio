@@ -4,7 +4,6 @@ import { BlurFade } from '@/components/ui/blur-fade';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Highlighter } from '@/components/ui/highlighter';
 import { OrbitingCircles } from '@/components/ui/orbiting-circles';
-import { TypingAnimation } from '@/components/ui/typing-animation';
 
 import avatarUrl from '@/assets/sarff.jpg';
 import reactUrl from '@/assets/react.svg';
@@ -70,12 +69,9 @@ export function Hero() {
             </CardHeader>
 
             <CardContent className="flex-center flex-col space-y-4 px-6 pb-4">
-              <TypingAnimation
-                className="font-mono text-xs text-primary/55"
-                duration={80}
-              >
+              <span className="font-mono text-xs text-primary/55">
                 Frontend Developer
-              </TypingAnimation>
+              </span>
 
               <div className="h-px w-full bg-linear-to-r from-transparent via-primary/10 to-transparent" />
 

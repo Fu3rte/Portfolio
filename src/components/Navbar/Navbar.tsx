@@ -78,7 +78,7 @@ const HamburgerButton = ({
 
 const socialLinks = [
   { label: 'Email:', value: '2575716528cqh@gmail.com' },
-  { label: 'WeChat:', value: 'f1nnnn_' },
+  { label: 'WeChat:', value: 'F1nnian_' },
 ];
 
 const menuItems = [

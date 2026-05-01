@@ -18,6 +18,7 @@ import {
 
 import portfolioImg from '@/assets/Projects/portfolio.png';
 import algoCheck from '@/assets/Projects/AlgoCheck.png';
+import bidAudit from '@/assets/Projects/BidAudit.png';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -34,7 +35,7 @@ const PROJECTS = [
     title: 'Bid Document Intelligent Review System',
     description:
       'An AI-powered system for intelligent review and analysis of bid documents, automating compliance checking and risk assessment.',
-    image: 'imgUrl',
+    image: bidAudit,
     tags: ['React', 'Tanstack Query', 'Ant Design', 'TypeScript'],
     href: 'https://github.com/you/ecommerce',
   },
