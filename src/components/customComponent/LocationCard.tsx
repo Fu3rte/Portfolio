@@ -47,6 +47,11 @@ export const LocationCard = () => {
         <MapContainer
           center={[LOCATION.lat, LOCATION.lng]}
           zoom={8}
+          dragging={false}
+          doubleClickZoom={false}
+          touchZoom={false}
+          boxZoom={false}
+          keyboard={false}
           scrollWheelZoom={false}
           zoomControl={false}
           attributionControl={false}
