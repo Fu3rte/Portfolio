@@ -29,6 +29,14 @@ CLAUDE.md
 
 docs/
 
+src/assets/Photos/*.avif
+src/assets/Photos/*.jpeg
+src/assets/Photos/*.jpg
+src/assets/Photos/*.png
+src/assets/Photos/*.tif
+src/assets/Photos/*.tiff
+src/assets/Photos/source/
+
 # API configuration files
 *.env
 *.env.local

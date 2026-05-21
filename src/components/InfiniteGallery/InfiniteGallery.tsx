@@ -4,6 +4,26 @@ import gsap from 'gsap';
 import './InfiniteGallery.css';
 import type { InfiniteGalleryProps, CanvasPhoto, PhotoItem } from './type';
 
+const imageCache = new Map<string, HTMLImageElement>();
+
+function getCachedImage(src: string) {
+  const cachedImage = imageCache.get(src);
+  if (cachedImage) return cachedImage;
+
+  const image = new Image();
+  image.crossOrigin = 'anonymous';
+  image.src = src;
+  imageCache.set(src, image);
+  return image;
+}
+
+function getTileOffsets(wrapSize: number, viewportSize: number) {
+  if (wrapSize <= 0 || viewportSize <= 0) return [0];
+
+  const radius = Math.ceil(viewportSize / wrapSize) + 1;
+  return Array.from({ length: radius * 2 + 1 }, (_, index) => index - radius);
+}
+
 export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   photos,
   photoWidth = 234,
@@ -27,17 +47,22 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const photosPerLine = 7;
 
   const photoGrid = useMemo(() => {
+    if (photos.length === 0) return [];
+
     const columnStep = photoWidth + gap;
     const rowOffset = columnStep / 2;
+    const rows = Math.ceil(photos.length / photosPerLine);
+    const cellCount = rows * photosPerLine;
 
-    return photos.map((photo, index) => {
+    return Array.from({ length: cellCount }, (_, index) => {
+      const photo = photos[index % photos.length];
       const col = index % photosPerLine;
       const row = Math.floor(index / photosPerLine);
       const staggerX = row % 2 === 1 ? rowOffset : 0;
 
       return {
         ...photo,
-        id: photo.id ?? index,
+        id: index + 1,
         x: col * columnStep + staggerX,
         y: row * (photoHeight + lineGap),
         movX: 0,
@@ -111,7 +136,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const bounds = useMemo(() => {
     const containerWidth =
       photosPerLine * (photoWidth * scale + gap * scale) - gap * scale;
-    const rows = Math.ceil(photos.length / photosPerLine);
+    const rows = Math.ceil(photoGrid.length / photosPerLine);
     const containerHeight =
       rows * (photoHeight * scale + lineGap * scale) - lineGap * scale;
     return {
@@ -120,7 +145,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
       wrapX: containerWidth + gap * scale,
       wrapY: containerHeight + lineGap * scale,
     };
-  }, [gap, lineGap, photoHeight, photoWidth, photos.length, scale]);
+  }, [gap, lineGap, photoGrid.length, photoHeight, photoWidth, scale]);
 
   const renderCanvas = useCallback(() => {
     const canvas = canvasRef.current;
@@ -137,7 +162,8 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     ctx.clearRect(0, 0, rect.width, rect.height);
 
     const radius = 18 * scale;
-    const offsets = [-1, 0, 1];
+    const offsetXRange = getTileOffsets(bounds.wrapX, rect.width);
+    const offsetYRange = getTileOffsets(bounds.wrapY, rect.height);
 
     const drawRoundedImage = (
       image: HTMLImageElement,
@@ -172,8 +198,8 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
       const img = photo.image;
       if (!img || !img.complete) return;
 
-      offsets.forEach((offsetX) => {
-        offsets.forEach((offsetY) => {
+      offsetXRange.forEach((offsetX) => {
+        offsetYRange.forEach((offsetY) => {
           drawRoundedImage(
             img,
             photo.x + photo.movX + offsetX * bounds.wrapX,
@@ -188,12 +214,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   }, [bounds.wrapX, bounds.wrapY, scale]);
 
   useEffect(() => {
-    const images = photoGrid.map((item) => {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.src = item.src;
-      return img;
-    });
+    const images = photoGrid.map((item) => getCachedImage(item.src));
 
     photosRef.current = photoGrid.map((item, index) => ({
       ...item,
@@ -255,28 +276,38 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     return () => canvas.removeEventListener('wheel', handleWheel);
   }, [movePhotos]);
 
-  const findPhotoAtPoint = useCallback((clientX: number, clientY: number) => {
-    const canvas = canvasRef.current;
-    if (!canvas) return null;
+  const findPhotoAtPoint = useCallback(
+    (clientX: number, clientY: number) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return null;
 
-    const rect = canvas.getBoundingClientRect();
-    const x = clientX - rect.left;
-    const y = clientY - rect.top;
+      const rect = canvas.getBoundingClientRect();
+      const x = clientX - rect.left;
+      const y = clientY - rect.top;
+      const offsetXRange = getTileOffsets(bounds.wrapX, rect.width);
+      const offsetYRange = getTileOffsets(bounds.wrapY, rect.height);
 
-    for (let i = photosRef.current.length - 1; i >= 0; i -= 1) {
-      const photo = photosRef.current[i];
-      const left = photo.x + photo.movX;
-      const top = photo.y + photo.movY;
-      const right = left + photo.width;
-      const bottom = top + photo.height;
+      for (let i = photosRef.current.length - 1; i >= 0; i -= 1) {
+        const photo = photosRef.current[i];
 
-      if (x >= left && x <= right && y >= top && y <= bottom) {
-        return photo;
+        for (const offsetX of offsetXRange) {
+          for (const offsetY of offsetYRange) {
+            const left = photo.x + photo.movX + offsetX * bounds.wrapX;
+            const top = photo.y + photo.movY + offsetY * bounds.wrapY;
+            const right = left + photo.width;
+            const bottom = top + photo.height;
+
+            if (x >= left && x <= right && y >= top && y <= bottom) {
+              return photo;
+            }
+          }
+        }
       }
-    }
 
-    return null;
-  }, []);
+      return null;
+    },
+    [bounds.wrapX, bounds.wrapY]
+  );
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -402,6 +433,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
                 ref={overlayImageRef}
                 src={selectedPhoto.src}
                 alt={selectedPhoto.title}
+                decoding="async"
                 className="max-h-[68vh] w-auto max-w-full object-contain"
               />
             </div>
