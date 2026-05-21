@@ -8,11 +8,20 @@ import { cn } from '@/lib/utils';
 
 import { ThemeProvider } from './components/theme-provider';
 
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { HomePage } from './pages/HomePage';
-import { PhotosPage } from './pages/PhotosPage';
-import { ContactPage } from './pages/ContactPage';
 import { Route, Routes } from 'react-router-dom';
+
+const PhotosPage = lazy(() =>
+  import('./pages/PhotosPage').then((module) => ({
+    default: module.PhotosPage,
+  }))
+);
+const ContactPage = lazy(() =>
+  import('./pages/ContactPage').then((module) => ({
+    default: module.ContactPage,
+  }))
+);
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -52,11 +61,13 @@ function App() {
             cr={1}
           />
 
-          <Routes>
-            <Route path="/" element={<HomePage isMobile={isMobile} />} />
-            <Route path="/photos" element={<PhotosPage />} />
-            <Route path="/contact" element={<ContactPage />} />
-          </Routes>
+          <Suspense fallback={<div className="min-h-svh w-full" />}>
+            <Routes>
+              <Route path="/" element={<HomePage isMobile={isMobile} />} />
+              <Route path="/photos" element={<PhotosPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+            </Routes>
+          </Suspense>
         </div>
 
         {isLoading && (
