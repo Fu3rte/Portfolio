@@ -1,6 +1,5 @@
 import { Navbar } from './components/Navbar/Navbar';
 import { ScrollProgress } from './components/WholePage/ScrollProgress';
-import { Pointer } from './components/WholePage/Pointer';
 import Loading from './components/WholePage/Loading';
 
 import { DotPattern } from './components/ui/dot-pattern';
@@ -44,36 +43,34 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <Pointer>
-        <Navbar setIsLoading={setIsLoading} />
-        <ScrollProgress />
+      <Navbar setIsLoading={setIsLoading} />
+      <ScrollProgress />
 
-        <div className="relative flex-center min-h-svh w-full flex-col overflow-x-clip bg-background">
-          <DotPattern
-            className={cn(
-              'fixed inset-0 z-0 opacity-[0.2]',
-              'mask-[radial-gradient(ellipse_at_center,white,transparent_90%)]'
-            )}
-            width={20}
-            height={20}
-            cx={1}
-            cy={1}
-            cr={1}
-          />
+      <div className="relative flex-center min-h-svh w-full flex-col overflow-x-clip bg-background">
+        <DotPattern
+          className={cn(
+            'fixed inset-0 z-0 opacity-[0.2]',
+            'mask-[radial-gradient(ellipse_at_center,white,transparent_90%)]'
+          )}
+          width={20}
+          height={20}
+          cx={1}
+          cy={1}
+          cr={1}
+        />
 
-          <Suspense fallback={<div className="min-h-svh w-full" />}>
-            <Routes>
-              <Route path="/" element={<HomePage isMobile={isMobile} />} />
-              <Route path="/photos" element={<PhotosPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-            </Routes>
-          </Suspense>
-        </div>
+        <Suspense fallback={<div className="min-h-svh w-full" />}>
+          <Routes>
+            <Route path="/" element={<HomePage isMobile={isMobile} />} />
+            <Route path="/photos" element={<PhotosPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+          </Routes>
+        </Suspense>
+      </div>
 
-        {isLoading && (
-          <Loading isMobile={isMobile} onComplete={() => setIsLoading(false)} />
-        )}
-      </Pointer>
+      {isLoading && (
+        <Loading isMobile={isMobile} onComplete={() => setIsLoading(false)} />
+      )}
     </ThemeProvider>
   );
 }

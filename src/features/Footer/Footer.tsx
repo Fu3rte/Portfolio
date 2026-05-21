@@ -40,8 +40,7 @@ function SocialDock() {
       {socialLinks.map((link) => (
         <DockIcon
           key={link.label}
-          className="group magnetic-icon cursor-none"
-          data-pointer
+          className="group magnetic-icon"
           onClick={() => link.href !== '#' && window.open(link.href, '_blank')}
         >
           <img

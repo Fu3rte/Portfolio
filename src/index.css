@@ -231,20 +231,6 @@ body {
   border: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  html,
-  body,
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  [role='button'],
-  [data-pointer] {
-    cursor: none !important;
-  }
-}
-
 @utility flex-center {
   @apply flex items-center justify-center;
 }

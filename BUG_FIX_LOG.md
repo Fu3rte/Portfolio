@@ -9,6 +9,7 @@
 | 2026-05-21 | 性能 | - | - | - | - | 待处理 |
 | 2026-05-21 | 性能 | src/App.tsx | PhotosPage 和 ContactPage 同步进入初始路由图 | 使用 React.lazy + Suspense 延迟加载非首页路由 | not verified | 已修复 |
 | 2026-05-21 | 性能 | src/features/About/About.tsx, src/components/customComponent/LocationCard.tsx | Leaflet 随 About 同步进入首页模块图 | LocationCard 改为 React.lazy + Suspense 延迟加载 | not verified | 已修复 |
+| 2026-05-21 | 性能 | src/App.tsx, src/components/WholePage/Pointer.tsx | 全局自定义 Pointer 挂载窗口级鼠标监听并隐藏原生 cursor | 移除 Pointer 包裹和组件，清理 cursor-none/data-pointer，恢复原生鼠标指针 | not verified | 已修复 |
 
 ## 状态约定
 
