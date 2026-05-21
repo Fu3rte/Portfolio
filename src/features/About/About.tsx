@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { lazy, Suspense, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -6,7 +6,6 @@ import { useGSAP } from '@gsap/react';
 import { BlurFade } from '@/components/ui/blur-fade';
 
 import { Badge } from '@/components/ui/badge';
-import { LocationCard } from '@/components/customComponent/LocationCard';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,6 +16,12 @@ const INTERESTS = [
   { emoji: '💪', label: 'CALISTHENICS' },
   { emoji: '🎧', label: 'MUSIC' },
 ];
+
+const LocationCard = lazy(() =>
+  import('@/components/customComponent/LocationCard').then((module) => ({
+    default: module.LocationCard,
+  }))
+);
 
 export function About() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -96,7 +101,16 @@ export function About() {
 
       <div className="mt-20 grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-10">
         <div className="about-map-card lg:col-span-5">
-          <LocationCard />
+          <Suspense
+            fallback={
+              <div className="w-full overflow-hidden rounded-[32px] border border-zinc-800 p-6">
+                <div className="mb-6 h-5 w-48 rounded bg-primary/10" />
+                <div className="h-80 w-full rounded-[24px] bg-primary/5" />
+              </div>
+            }
+          >
+            <LocationCard />
+          </Suspense>
         </div>
 
         <div className="relative space-y-8 lg:col-span-6 lg:col-start-7">
