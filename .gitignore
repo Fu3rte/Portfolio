@@ -46,3 +46,10 @@ api-config*
 apikey*
 
 简历项目经历.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
