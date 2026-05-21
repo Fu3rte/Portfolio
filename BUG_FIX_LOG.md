@@ -13,6 +13,8 @@
 | 2026-05-21 | 性能 | src/pages/PhotosPage.tsx, src/assets/Photos | 原图仍被 Git 跟踪且照片页只展示 7 张 optimized WebP | 照片页改为展示 10 张 optimized WebP，移除已跟踪原图并保留 ignored source | npm run typecheck, npm run build | 已修复 |
 | 2026-05-21 | Bug | src/components/InfiniteGallery/InfiniteGallery.tsx | 照片数量未补齐完整画布网格，固定 3x3 平铺副本在大视口和拖拽后露出空白 | 画布内部循环补齐完整行，并按视口动态计算平铺副本范围，点击检测同步覆盖平铺副本 | npm run typecheck, npm run build, Playwright | 已修复 |
 | 2026-05-21 | 性能 | src/App.tsx, src/components/WholePage/Pointer.tsx | 全局自定义 Pointer 挂载窗口级鼠标监听并隐藏原生 cursor | 移除 Pointer 包裹和组件，清理 cursor-none/data-pointer，恢复原生鼠标指针 | not verified | 已修复 |
+| 2026-05-21 | 性能 | src/components/InfiniteGallery/InfiniteGallery.tsx | 照片页拖拽和滚轮输入在高频事件中直接触发 canvas 重绘 | 使用 requestAnimationFrame 合并位移更新并加入阻尼停止机制 | npm run typecheck, npm run build, Playwright CLI | 已修复 |
+| 2026-05-21 | Bug | src/components/InfiniteGallery/InfiniteGallery.tsx | 移动端照片页按 `standardWidth / viewportWidth` 放大画布，屏幕越窄单张图片越大 | 缩放改为不超过原始尺寸，并按视口宽度限制单张图片最大约 42vw | npm run typecheck, npm run build | 已修复 |
 
 ## 状态约定
 

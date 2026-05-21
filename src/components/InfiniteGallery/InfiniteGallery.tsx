@@ -3,6 +3,12 @@ import gsap from 'gsap';
 
 import type { InfiniteGalleryProps, CanvasPhoto, PhotoItem } from './type';
 
+const MOVEMENT_DAMPING = 0.86;
+const MOVEMENT_EPSILON = 0.1;
+const DRAG_INERTIA_MULTIPLIER = 0.65;
+const WHEEL_INERTIA_MULTIPLIER = 0.12;
+const MOBILE_MAX_PHOTO_WIDTH_RATIO = 0.42;
+
 const imageCache = new Map<string, HTMLImageElement>();
 
 function getCachedImage(src: string) {
@@ -40,6 +46,9 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const isDragging = useRef(false);
   const didDrag = useRef(false);
   const lastMouse = useRef({ x: 0, y: 0 });
+  const movementRef = useRef({ x: 0, y: 0 });
+  const velocityRef = useRef({ x: 0, y: 0 });
+  const animationFrameRef = useRef<number | null>(null);
   const [scale, setScale] = useState(1);
   const [selectedPhoto, setSelectedPhoto] = useState<PhotoItem | null>(null);
 
@@ -73,7 +82,13 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   useEffect(() => {
     const handleResize = () => {
       const viewportWidth = window.visualViewport?.width ?? window.innerWidth;
-      setScale(Math.max(1, standardWidth / viewportWidth));
+      const baselineScale = Math.min(1, viewportWidth / standardWidth);
+      const widthLimitedScale =
+        photoWidth > 0
+          ? (viewportWidth * MOBILE_MAX_PHOTO_WIDTH_RATIO) / photoWidth
+          : 1;
+
+      setScale(Math.min(1, Math.max(baselineScale, widthLimitedScale)));
     };
 
     handleResize();
@@ -84,7 +99,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
       window.removeEventListener('resize', handleResize);
       window.visualViewport?.removeEventListener('resize', handleResize);
     };
-  }, [standardWidth]);
+  }, [photoWidth, standardWidth]);
 
   useEffect(() => {
     photosRef.current = photoGrid.map((item) => ({
@@ -244,7 +259,7 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
     };
   }, [photoGrid, photoHeight, photoWidth, renderCanvas, scale]);
 
-  const movePhotos = useCallback(
+  const applyPhotoMovement = useCallback(
     (dx: number, dy: number) => {
       photosRef.current.forEach((photo) => {
         photo.movX += dx;
@@ -257,9 +272,98 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
           photo.movY %= bounds.wrapY;
         }
       });
-      renderCanvas();
     },
-    [bounds.wrapX, bounds.wrapY, renderCanvas]
+    [bounds.wrapX, bounds.wrapY]
+  );
+
+  const runMovementFrame = useCallback(() => {
+    animationFrameRef.current = null;
+
+    const pendingMovement = movementRef.current;
+    const pendingX = pendingMovement.x;
+    const pendingY = pendingMovement.y;
+    pendingMovement.x = 0;
+    pendingMovement.y = 0;
+
+    const hasPendingMovement = pendingX !== 0 || pendingY !== 0;
+    let frameX = pendingX;
+    let frameY = pendingY;
+
+    if (!hasPendingMovement && !isDragging.current) {
+      const velocity = velocityRef.current;
+      if (
+        Math.abs(velocity.x) > MOVEMENT_EPSILON ||
+        Math.abs(velocity.y) > MOVEMENT_EPSILON
+      ) {
+        frameX = velocity.x;
+        frameY = velocity.y;
+      }
+    }
+
+    if (frameX !== 0 || frameY !== 0) {
+      applyPhotoMovement(frameX, frameY);
+      renderCanvas();
+    }
+
+    const velocity = velocityRef.current;
+    if (!hasPendingMovement || !isDragging.current) {
+      velocity.x *= MOVEMENT_DAMPING;
+      velocity.y *= MOVEMENT_DAMPING;
+    }
+
+    const hasQueuedMovement =
+      movementRef.current.x !== 0 || movementRef.current.y !== 0;
+    const hasMomentum =
+      !isDragging.current &&
+      (Math.abs(velocity.x) > MOVEMENT_EPSILON ||
+        Math.abs(velocity.y) > MOVEMENT_EPSILON);
+
+    if (hasQueuedMovement || hasMomentum) {
+      animationFrameRef.current =
+        window.requestAnimationFrame(runMovementFrame);
+    }
+  }, [applyPhotoMovement, renderCanvas]);
+
+  const requestMovementFrame = useCallback(() => {
+    if (animationFrameRef.current !== null) return;
+    animationFrameRef.current = window.requestAnimationFrame(runMovementFrame);
+  }, [runMovementFrame]);
+
+  const scheduleMovement = useCallback(
+    (dx: number, dy: number, inertiaMultiplier: number) => {
+      if (dx === 0 && dy === 0) return;
+
+      movementRef.current.x += dx;
+      movementRef.current.y += dy;
+      velocityRef.current.x = dx * inertiaMultiplier;
+      velocityRef.current.y = dy * inertiaMultiplier;
+      requestMovementFrame();
+    },
+    [requestMovementFrame]
+  );
+
+  const scheduleInertiaFrame = useCallback(() => {
+    const queuedMovement = movementRef.current;
+    const velocity = velocityRef.current;
+
+    if (
+      queuedMovement.x !== 0 ||
+      queuedMovement.y !== 0 ||
+      Math.abs(velocity.x) > MOVEMENT_EPSILON ||
+      Math.abs(velocity.y) > MOVEMENT_EPSILON
+    ) {
+      requestMovementFrame();
+    }
+  }, [requestMovementFrame]);
+
+  useEffect(
+    () => () => {
+      if (animationFrameRef.current !== null) {
+        window.cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    },
+    [runMovementFrame]
   );
 
   useEffect(() => {
@@ -268,12 +372,12 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
 
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
-      movePhotos(e.deltaX, -e.deltaY);
+      scheduleMovement(e.deltaX, -e.deltaY, WHEEL_INERTIA_MULTIPLIER);
     };
 
     canvas.addEventListener('wheel', handleWheel, { passive: false });
     return () => canvas.removeEventListener('wheel', handleWheel);
-  }, [movePhotos]);
+  }, [scheduleMovement]);
 
   const findPhotoAtPoint = useCallback(
     (clientX: number, clientY: number) => {
@@ -313,6 +417,8 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
       isDragging.current = true;
       didDrag.current = false;
       lastMouse.current = { x: e.clientX, y: e.clientY };
+      velocityRef.current.x = 0;
+      velocityRef.current.y = 0;
       e.currentTarget.setPointerCapture(e.pointerId);
     },
     []
@@ -328,10 +434,10 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
         didDrag.current = true;
       }
 
-      movePhotos(dx, dy);
+      scheduleMovement(dx, dy, DRAG_INERTIA_MULTIPLIER);
       lastMouse.current = { x: e.clientX, y: e.clientY };
     },
-    [movePhotos]
+    [scheduleMovement]
   );
 
   const openPhoto = useCallback((photo: PhotoItem) => {
@@ -362,18 +468,20 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   const handlePointerUp = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
       isDragging.current = false;
+      scheduleInertiaFrame();
       try {
         e.currentTarget.releasePointerCapture(e.pointerId);
       } catch {
         // ignore
       }
     },
-    []
+    [scheduleInertiaFrame]
   );
 
   const handlePointerLeave = useCallback(() => {
     isDragging.current = false;
-  }, []);
+    scheduleInertiaFrame();
+  }, [scheduleInertiaFrame]);
 
   const closePhoto = useCallback(() => {
     if (overlayTlRef.current) {
