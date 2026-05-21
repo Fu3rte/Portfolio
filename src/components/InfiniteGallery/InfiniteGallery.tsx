@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
 
-import './InfiniteGallery.css';
 import type { InfiniteGalleryProps, CanvasPhoto, PhotoItem } from './type';
 
 const imageCache = new Map<string, HTMLImageElement>();
@@ -28,8 +27,8 @@ export const InfiniteGallery: React.FC<InfiniteGalleryProps> = ({
   photos,
   photoWidth = 234,
   photoHeight = 342,
-  gap = 36,
-  lineGap = 48,
+  gap = 96,
+  lineGap = 120,
   standardWidth = 1440,
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
