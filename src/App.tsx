@@ -8,9 +8,13 @@ import { cn } from '@/lib/utils';
 import { ThemeProvider } from './components/theme-provider';
 
 import { lazy, Suspense, useEffect, useState } from 'react';
-import { HomePage } from './pages/HomePage';
 import { Route, Routes } from 'react-router-dom';
 
+const HomePage = lazy(() =>
+  import('./pages/HomePage').then((module) => ({
+    default: module.HomePage,
+  }))
+);
 const PhotosPage = lazy(() =>
   import('./pages/PhotosPage').then((module) => ({
     default: module.PhotosPage,
@@ -24,16 +28,17 @@ const ContactPage = lazy(() =>
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    window.matchMedia('(max-width: 767px)').matches
+  );
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 767px)');
 
-    const handleTableChange = (e: any) => {
+    const handleTableChange = (e: MediaQueryListEvent) => {
       setIsMobile(e.matches);
     };
 
-    setIsMobile(mediaQuery.matches);
     mediaQuery.addEventListener('change', handleTableChange);
 
     return () => {
