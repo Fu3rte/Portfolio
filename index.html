@@ -13,6 +13,26 @@
 
 <body>
   <div id="root"></div>
+  <script>
+    // Restore the real route after the 404.html redirect (see public/404.html).
+    // Converts ?p=/route&q=query back into a clean pathname before React mounts.
+    (function () {
+      var search = window.location.search;
+      if (!search) return;
+      var params = {};
+      search.slice(1).split('&').forEach(function (pair) {
+        var parts = pair.split('=');
+        params[parts[0]] = decodeURIComponent(parts.slice(1).join('=').replace(/~and~/g, '&'));
+      });
+      if (params.p !== undefined) {
+        var restored =
+          window.location.pathname.slice(0, -1) + params.p +
+          (params.q ? '?' + params.q : '') +
+          window.location.hash;
+        window.history.replaceState(null, null, restored);
+      }
+    })();
+  </script>
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
