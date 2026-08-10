@@ -61,3 +61,11 @@ This project is a personal portfolio site. These rules are for Codex and other a
   - `fix: optimize gallery canvas redraw`
   - `perf: lazy load photo route`
   - `docs: update agent workflow`
+
+<!-- openwolf:begin -->
+# OpenWolf
+
+@.wolf/OPENWOLF.md
+
+This project uses OpenWolf for context management. Read and follow .wolf/OPENWOLF.md every session. Check .wolf/cerebrum.md before generating code. Check .wolf/anatomy.md before reading files.
+<!-- openwolf:end -->
