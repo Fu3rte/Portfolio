@@ -18,6 +18,7 @@
 | 2026-05-21 | 性能 | src/App.tsx | 首页同步进入初始路由图，首屏主 chunk 承担过多页面代码 | 将 HomePage 改为 React.lazy 路由级按需加载，未调大 chunkSizeWarningLimit | npm run typecheck, npm run build | 已修复 |
 | 2026-05-21 | 性能 | src/pages/HomePage.tsx | 首页 below-the-fold section 随首页初始渲染同步加载 | 保留 Hero 同步渲染，About、TechStack、Project、HomePageContact、Footer 改为视口触发 lazy section | npm run typecheck, npm run build | 已修复 |
 | 2026-05-21 | 性能 | src/main.tsx, src/pages/ContactPage.tsx | 全局 Toaster 让 sonner 进入首屏入口图 | 移除 main.tsx 中的 Toaster 静态挂载，改在 ContactPage 懒加载路由内渲染 | npm run typecheck, npm run build | 已修复 |
+| 2026-08-10 | Bug | vite.config.ts, src/main.tsx, public/404.html | GitHub Pages 项目站点配置强制使用 `/Portfolio`，根路径深链接无法由 SPA 接管 | 将 Vite、BrowserRouter 和 GitHub Pages 404 回退统一切换为根路径；仓库需重命名为 `fu3rte.github.io` 后线上生效 | npm run typecheck, npm run build, root-path assertion; online not verified | 已修复 |
 
 ## 状态约定
 
